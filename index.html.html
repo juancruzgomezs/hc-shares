@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HC Shares · Hiper & Super · Índice de Dashboards</title>
+<style>
+:root{
+ --ul:#0b1f8f; --ul2:#1f36c7; --ink:#12203c; --mut:#63708c; --line:#e4e8f2;
+ --bg:#f4f6fb; --card:#fff; --acc:#7de3c3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 60px}
+header.top{background:linear-gradient(120deg,#0b1f8f,#1f36c7 60%,#3b57e6);color:#fff;padding:34px 0 30px;box-shadow:0 4px 20px rgba(11,31,143,.25)}
+header.top .wrap{padding-bottom:0}
+.brandline{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600}
+.brandline .dot{width:9px;height:9px;border-radius:50%;background:var(--acc)}
+h1{font-size:28px;font-weight:700;margin:10px 0 6px;letter-spacing:-.4px}
+.sub{opacity:.9;font-size:14px;max-width:760px}
+/* selector de vista mensual / semanal */
+.tabs{display:flex;gap:8px;margin:26px 0 4px;flex-wrap:wrap}
+.tab{border:none;background:var(--card);border:1px solid var(--line);font-family:inherit;font-size:14px;font-weight:700;color:var(--mut);padding:10px 20px;border-radius:10px;cursor:pointer;transition:.15s}
+.tab:hover{border-color:var(--ul2);color:var(--ul2)}
+.tab.on{background:var(--ul);border-color:var(--ul);color:#fff}
+/* bloque de un período (mes o semana) */
+.period{margin-top:26px}
+.period h2{font-size:16px;font-weight:700;color:var(--ul);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.period h2 .bar{width:5px;height:22px;background:var(--ul2);border-radius:3px}
+.period h2 .badge{margin-left:auto;font-size:11px;font-weight:700;color:var(--mut);background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+a.card{display:block;text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;box-shadow:0 1px 3px rgba(18,32,60,.05);transition:.16s;position:relative;overflow:hidden}
+a.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(11,31,143,.13);border-color:var(--ul2)}
+a.card .stripe{position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--ul2)}
+a.card .cat{font-size:16px;font-weight:800;color:var(--ink);margin-bottom:3px}
+a.card .desc{font-size:12px;color:var(--mut);margin-bottom:12px}
+a.card .go{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--ul2)}
+a.card .go .arrow{transition:.16s}
+a.card:hover .go .arrow{transform:translateX(3px)}
+.empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--mut);font-size:13px}
+.foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--mut);font-size:12px;line-height:1.7}
+.foot code{background:#fff;border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:11.5px}
+@media(max-width:560px){ h1{font-size:22px} .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+ <div class="brandline"><span class="dot"></span> Unilever · Home Care · Argentina · CSP &amp; Performance</div>
+ <h1>HC Shares · Hiper &amp; Super</h1>
+ <div class="sub">Índice de dashboards de share por categoría. Elegí el período y abrí el tablero. Cada dashboard es interactivo (Valor/Volumen, filtros por cadena y fabricante).</div>
+</div></header>
+
+<div class="wrap">
+ <div class="tabs">
+  <button class="tab on" data-view="mensual" onclick="setView('mensual')">📅 Mensuales</button>
+  <button class="tab" data-view="semanal" onclick="setView('semanal')">🗓️ Semanales</button>
+ </div>
+ <div id="content"></div>
+
+ <div class="foot">
+  <b>Cómo agregar un dashboard nuevo:</b> subí el HTML al repo (ej. <code>mensual/2026-08/heavy-duty/index.html</code>)
+  y agregá una línea en el bloque <code>DATA</code> de este archivo (al principio del &lt;script&gt;). Guardá y listo.<br>
+  Dashboards generados sobre la base Scentia · Cluster Hiper &amp; Super (Carrefour · Coto · La Anónima · Cencosud · Dia · GDN · Coop. Obrera).
+ </div>
+</div>
+
+<script>
+/* =====================================================================
+   DATA — ACÁ AGREGÁS LOS DASHBOARDS. Es lo único que tenés que editar.
+   Cada entrada: { cat, desc, url }
+     · cat  = nombre de la categoría (título de la tarjeta)
+     · desc = subtítulo corto
+     · url  = ruta relativa al HTML (respecto de este index)
+   Agrupados por período (la "key" es el título del bloque).
+   ===================================================================== */
+const DATA = {
+  mensual: {
+    "Julio 2026": [
+      { cat:"Heavy Duty",  desc:"Lavado de ropa",       url:"mensual/2026-07/heavy-duty/index.html" },
+      { cat:"Dishwash",    desc:"Lavavajillas manual",  url:"mensual/2026-07/dishwash/index.html" },
+      // { cat:"Light Duty",  desc:"...", url:"mensual/2026-07/light-duty/index.html" },
+      // { cat:"DW Máquina",  desc:"...", url:"mensual/2026-07/dw-maquina/index.html" },
+    ],
+    // "Agosto 2026": [
+    //   { cat:"Heavy Duty", desc:"Lavado de ropa", url:"mensual/2026-08/heavy-duty/index.html" },
+    // ],
+  },
+  semanal: {
+    // "Semana 31 · 2026": [
+    //   { cat:"Heavy Duty", desc:"Lavado de ropa", url:"semanal/2026-W31/heavy-duty/index.html" },
+    // ],
+  }
+};
+
+/* ---- render ---- */
+function cardHTML(item){
+  return `<a class="card" href="${item.url}">
+    <div class="stripe"></div>
+    <div class="cat">${item.cat}</div>
+    <div class="desc">${item.desc||''}</div>
+    <div class="go">Abrir dashboard <span class="arrow">→</span></div>
+  </a>`;
+}
+function setView(view){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.view===view));
+  const data=DATA[view]||{};
+  const periods=Object.keys(data);
+  const box=document.getElementById('content');
+  if(periods.length===0){
+    box.innerHTML=`<div class="empty">Todavía no hay dashboards ${view==='semanal'?'semanales':'mensuales'} cargados. Se agregan editando el bloque <b>DATA</b> de este archivo.</div>`;
+    return;
+  }
+  box.innerHTML=periods.map(p=>{
+    const items=data[p]||[];
+    const cards=items.length?`<div class="grid">${items.map(cardHTML).join('')}</div>`
+      :`<div class="empty">Sin categorías en este período.</div>`;
+    return `<div class="period"><h2><span class="bar"></span>${p}<span class="badge">${items.length} ${items.length===1?'dashboard':'dashboards'}</span></h2>${cards}</div>`;
+  }).join('');
+}
+setView('mensual');
+</script>
+</body>
+</html>
