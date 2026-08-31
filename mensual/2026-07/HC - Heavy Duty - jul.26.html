@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnóstico de Share · Heavy Duty (Lavado de Ropa) · Jul 2026 · HC Argentina</title>
+<style>
+:root{
+ --ul:#0b1f8f; --ul2:#1f36c7; --ink:#12203c; --mut:#63708c; --line:#e4e8f2;
+ --bg:#f4f6fb; --card:#ffffff; --pos:#1a8f5a; --posbg:#e5f6ee; --neg:#d1344b; --negbg:#fdeaed;
+ --warn:#b8860b; --amber:#fff6e0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1400px;margin:0 auto;padding:0 22px 60px}
+header.top{background:linear-gradient(120deg,#0b1f8f,#1f36c7 60%,#3b57e6);color:#fff;padding:26px 0 22px;box-shadow:0 4px 20px rgba(11,31,143,.25)}
+header.top .wrap{padding-top:0}
+.brandline{display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600}
+.brandline .dot{width:9px;height:9px;border-radius:50%;background:#7de3c3}
+h1{font-size:26px;font-weight:700;margin:8px 0 4px;letter-spacing:-.3px}
+.sub{opacity:.9;font-size:13px;max-width:820px}
+.tagchips{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.tagchips .chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:600}
+nav.sticky{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.04)}
+nav.sticky .wrap{display:flex;gap:6px;overflow-x:auto;padding:9px 22px}
+nav a{white-space:nowrap;color:var(--mut);text-decoration:none;font-weight:600;font-size:12px;padding:6px 12px;border-radius:7px}
+nav a:hover{background:var(--bg);color:var(--ul)}
+section{margin-top:30px;scroll-margin-top:60px}
+.sect-h{display:flex;align-items:center;gap:11px;margin-bottom:14px;flex-wrap:wrap}
+.sect-h .bar{width:5px;height:26px;background:var(--ul2);border-radius:3px}
+.sect-h h2{font-size:19px;font-weight:700;letter-spacing:-.2px}
+.sect-h .note{margin-left:auto;font-size:11px;color:var(--mut);font-weight:600;background:#fff;border:1px solid var(--line);padding:4px 10px;border-radius:6px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:1000px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;box-shadow:0 1px 3px rgba(18,32,60,.05)}
+.card h3{font-size:13.5px;font-weight:700;color:var(--ul);margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.card .csub{font-size:11px;color:var(--mut);margin-bottom:11px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);font-weight:700;border-bottom:2px solid var(--line)}
+td.l,th.l{text-align:left}
+tr:last-child td{border-bottom:none}
+.tot td{font-weight:700;background:#f7f9ff;border-top:2px solid var(--ul2)}
+.b{font-weight:700}.mut{color:var(--mut)}
+.pos{color:var(--pos);font-weight:700}.neg{color:var(--neg);font-weight:700}
+.pill{padding:2px 7px;border-radius:5px;font-weight:700;font-size:11px;display:inline-block;min-width:52px;text-align:center}
+.brandrow td{background:#fafbff}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px;position:relative;overflow:hidden}
+.kpi .lab{font-size:11px;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.kpi .val{font-size:29px;font-weight:800;margin:5px 0 2px;letter-spacing:-1px}
+.kpi .delta{font-size:12px;font-weight:700}
+.kpi .stripe{position:absolute;left:0;top:0;bottom:0;width:5px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--mut);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.spark{display:inline-block;vertical-align:middle}
+.small{font-size:11px}
+.exec{background:linear-gradient(135deg,#0b1f8f,#22163f);color:#fff;border-radius:14px;padding:24px 26px}
+.exec h2{color:#fff}
+.exec .col{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:11px;padding:16px}
+.exec h4{font-size:13px;letter-spacing:.03em;text-transform:uppercase;margin-bottom:9px;color:#9fd8ff}
+.exec ul{list-style:none}
+.exec li{padding:6px 0 6px 18px;position:relative;font-size:12.5px;border-bottom:1px solid rgba(255,255,255,.08)}
+.exec li:last-child{border:none}
+.exec li:before{content:"";position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%;background:#7de3c3}
+.exec li.warn:before{background:#ffcf5c}
+.exec li.bad:before{background:#ff7a8a}
+.foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:11px}
+.tabnote{font-size:10.5px;color:var(--mut);margin-top:7px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* ===== filtros unificados ===== */
+.filterbar{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(18,32,60,.05);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.flabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mut)}
+.fchips{display:flex;gap:7px;flex-wrap:wrap}
+.fchip{border:1.5px solid var(--line);background:#fff;font-family:inherit;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer;transition:.12s;user-select:none;display:inline-flex;align-items:center;gap:6px}
+.fchip:hover{border-color:var(--ul2);color:var(--ul2)}
+.fchip.on{background:var(--ul);border-color:var(--ul);color:#fff}
+.fchip.on:hover{color:#fff}
+.fchip .dot{width:9px;height:9px;border-radius:50%;background:currentColor}
+.ftoggle{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.ftoggle button{border:none;background:#fff;font-family:inherit;padding:7px 16px;font-size:12.5px;font-weight:700;color:var(--mut);cursor:pointer;transition:.15s}
+.ftoggle button.on{background:var(--ul2);color:#fff}
+.fmini{font-size:11px;color:var(--mut)}
+.fnotice{display:none;margin-top:12px;padding:10px 13px;background:#fff8e6;border:1px solid #f0d68a;border-radius:8px;font-size:11.5px;color:#7a5a00;line-height:1.5}
+.fnotice.show{display:block}
+.fnotice code{background:#fff;border:1px solid #f0d68a;border-radius:4px;padding:1px 5px}
+.dim{opacity:.4;transition:.2s;pointer-events:none}
+/* seccion 1 mercado */
+.wrow{display:grid;grid-template-columns:120px 1fr 50px 64px;align-items:center;gap:8px;margin:5px 0}
+.wrow .nm{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bartrack{background:#eef1f8;border-radius:5px;height:17px;position:relative;overflow:hidden}
+.barfill{height:100%;border-radius:5px}
+.wval{text-align:right;font-size:11.5px;font-weight:700}
+.varpill{text-align:center;font-size:11px;font-weight:700;padding:2px 6px;border-radius:5px}
+.posbg{background:var(--posbg)}.negbg{background:var(--negbg)}
+.trow{border-top:2px solid var(--ul2);margin-top:6px;padding-top:6px;font-weight:800}
+.hdr{display:grid;grid-template-columns:120px 1fr 50px 64px;gap:8px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);font-weight:700;margin-bottom:6px}
+.hdr div:nth-child(3){text-align:right}.hdr div:nth-child(4){text-align:center}
+.seg{display:inline-flex;background:#eef1f8;border-radius:8px;padding:3px;gap:2px;margin-left:auto;flex-wrap:wrap}
+.seg button{border:none;background:transparent;font-family:inherit;font-size:11.5px;font-weight:700;color:var(--mut);padding:5px 12px;border-radius:6px;cursor:pointer}
+.seg button.on{background:#fff;color:var(--ul);box-shadow:0 1px 3px rgba(18,32,60,.12)}
+.tip{position:fixed;pointer-events:none;background:#12203c;color:#fff;font-size:11px;padding:6px 9px;border-radius:6px;opacity:0;transition:opacity .1s;z-index:99;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+/* seccion 2 */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media(max-width:1050px){.grid2{grid-template-columns:1fr}}
+/* shares por cadena */
+.grp{background:#f2f5ff}
+th.grp{color:var(--ul2);border-left:2px solid var(--ul2);border-right:2px solid var(--ul2)}
+td.grpL{border-left:2px solid var(--ul2)}
+td.grpR{border-right:2px solid var(--ul2)}
+.cadena{font-weight:700;text-align:left}
+.big{font-size:15px;font-weight:800}
+.mcell{font-size:11.5px;font-weight:600}
+.spark-td{padding:4px 6px}
+svg{max-width:100%}
+img{max-width:100%;height:auto}
+/* ===== RESPONSIVE / MOBILE ===== */
+/* tablets */
+@media(max-width:1000px){
+ .g4{grid-template-columns:1fr 1fr}
+}
+/* celulares */
+@media(max-width:680px){
+ .wrap{padding:0 13px 44px}
+ header.top{padding:20px 0 18px}
+ .brandline{font-size:10.5px;letter-spacing:.08em}
+ h1{font-size:19px;line-height:1.25}
+ .sub{font-size:12px}
+ .tagchips{gap:6px}
+ .tagchips .chip{font-size:10.5px;padding:4px 9px}
+ nav.sticky .wrap{padding:8px 13px;gap:4px}
+ nav a{font-size:11.5px;padding:5px 9px}
+ section{margin-top:22px}
+ .sect-h h2{font-size:16px}
+ .sect-h .note{margin-left:0;order:3;width:100%}
+ .grid{gap:12px}
+ .g4{grid-template-columns:1fr 1fr}
+ .kpi{padding:12px 13px}
+ .kpi .val{font-size:22px}
+ .kpi .lab{font-size:10px}
+ .card{padding:13px 12px 12px}
+ .filterbar{padding:10px 12px;gap:9px}
+ .seg{margin-left:0;width:100%;justify-content:flex-start}
+ table{font-size:11px}
+ th,td{padding:5px 6px}
+ th{font-size:9.5px}
+ .wrow,.hdr{grid-template-columns:88px 1fr 40px 50px;gap:6px}
+ .wrow .nm{font-size:10.5px}
+ .bartrack{height:15px}
+ .exec{padding:18px 15px}
+}
+/* celulares chicos */
+@media(max-width:430px){
+ h1{font-size:17px}
+ .g4{grid-template-columns:1fr}
+ .wrow,.hdr{grid-template-columns:76px 1fr 36px 46px}
+ nav.sticky .wrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+ <div class="brandline"><span class="dot"></span> Unilever · Home Care · Argentina · CSP &amp; Performance · CLUSTER HIPER &amp; SUPER</div>
+ <h1>Diagnóstico Integral de Share — Heavy Duty (Lavado de Ropa) · Cluster Hiper &amp; Super · Jul 2026</h1>
+ <div class="sub">Mercado de <b>Heavy Duty</b> (lavado de ropa) en el <b>cluster Hiper &amp; Super</b>. Lectura dual: <b>YTD Jul'26 vs YTD Jul'25</b> (estructural) y <b>Mes Jul'26 vs Jun'26</b> (momentum). Todos los shares son <b>share de valor</b>.</div>
+ <div class="tagchips"><span class="chip">Fuente: HC Shares Mensuales BASE.xlsx</span><span class="chip">7 cadenas · 5 formatos · 2 áreas</span><span class="chip">Fabricantes foco: UNILEVER · DREAMCO · MARCAS PROPIAS · ECOVITA</span></div>
+</div></header>
+
+<nav class="sticky"><div class="wrap">
+ <a href="#kpis">Resumen</a>
+ <a href="#mercado">Mercado</a>
+ <a href="#shares">Shares por Cadena</a>
+ <a href="#comp-manuf">Fabricantes y Marcas</a>
+ <a href="#comp-rank">Leaders/Bleeders</a>
+ <a href="#ciclocorto">Ciclo Corto</a>
+ <a href="#exec">Resumen Ejecutivo</a>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ KPIs ============ -->
+<section id="kpis">
+ <div class="grid g4" id="kpicards"></div>
+ <div class="tabnote">Nota metodológica: la variación mensual se calcula como <b>Jul 2026 vs Jun 2026</b> (secuencial). El YTD compara <b>ene–jul 2026 vs ene–jul 2025</b>. Share = participación en <b>valor</b>.</div>
+</section>
+
+<!-- ============ 1 · MERCADO ============ -->
+<section id="mercado">
+ <div class="sect-h"><span class="bar"></span><h2>1 · Mercado</h2>
+  <div class="seg" id="segMetric" style="margin-left:auto">
+   <button data-m="value" class="on">Valor</button>
+   <button data-m="volume">Volumen</button>
+  </div>
+  <span class="note" id="mktNote">Valor · YTD Jul'26</span>
+ </div>
+ <div class="grid g2">
+  <div class="card">
+   <h3>Peso de las cadenas en <span class="metWord">Valor</span></h3>
+   <div class="csub">Participación % del <span class="metLow">valor</span> total · YTD 2026 · var en pp vs YTD 2025</div>
+   <div class="hdr"><div>Cadena</div><div></div><div>Peso</div><div>Var YTD</div></div>
+   <div id="canalBars"></div>
+  </div>
+  <div class="card">
+   <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap">
+    <h3 style="margin:0">Peso en <span class="metWord">Valor</span></h3>
+    <div class="seg" id="segTop">
+     <button data-d="Tier" class="on">Tiers</button>
+     <button data-d="Formato">Formato</button>
+     <button data-d="Tamaño">Tamaños</button>
+    </div>
+   </div>
+   <div class="csub">Participación % del <span class="metLow">valor</span> total · YTD 2026 · var en pp vs YTD 2025</div>
+   <div class="hdr"><div id="dimLabel">Tier</div><div></div><div>Peso</div><div>Var YTD</div></div>
+   <div id="dimBars"></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:16px">
+  <h3>Evolución del mix en <span class="metWord">Valor</span> — YTD y últimos 12 meses</h3>
+  <div class="csub">Barras 100% apiladas por <b id="dimLabel2">Tier</b> · bloque izquierdo = YTD'25 vs YTD'26 · a la derecha, Ago'25 → Jul'26. Cada barra = 100% del <span class="metLow">valor</span> de esa columna (mix). Usá los selectores de arriba.</div>
+  <div id="strip"></div>
+  <div class="legend" id="legendMix"></div>
+ </div>
+</section>
+
+<!-- ============ SHARES POR CADENA ============ -->
+<section id="shares">
+ <div class="sect-h"><span class="bar"></span><h2>2 · SHARES por Cadena</h2><span class="note">YTD 2026 · Tendencia L6M (Feb→Jul)</span></div>
+ <div class="filterbar">
+  <span class="flabel">Fabricante</span>
+  <div class="fchips" id="scChips"></div>
+  <span class="fmini" id="scMini"></span>
+ </div>
+ <div class="card">
+  <div class="sect-h" style="margin-bottom:8px"><span class="bar" style="height:20px"></span><h2 id="scTitle" style="font-size:15px">Share de UNILEVER por cadena</h2></div>
+  <div class="scroll" id="scTabla"></div>
+  <div class="legend">
+   <span><span class="sw" style="width:16px;height:3px;background:var(--pos)"></span>Tendencia en alza (Jul≥Feb)</span>
+   <span><span class="sw" style="width:16px;height:3px;background:var(--neg)"></span>Tendencia en baja</span>
+   <span>Var en <b>bps</b> · Share en <b>valor</b></span>
+  </div>
+ </div>
+ <div class="card" style="margin-top:16px">
+  <div class="sect-h" style="margin-bottom:6px"><span class="bar" style="height:20px"></span><h2 style="font-size:15px">2.1 · Evolución del mix en <span class="metWord21">Valor</span> — YTD y últimos 12 meses</h2>
+   <div class="seg" id="segMetric21" style="margin-left:auto">
+    <button data-m="value" class="on">Valor</button>
+    <button data-m="volume">Volumen</button>
+   </div>
+   <div class="seg" id="segDim21">
+    <button data-d="Fabricante" class="on">Fabricante</button>
+    <button data-d="Marca">Marca</button>
+   </div>
+  </div>
+  <div class="csub">Barras 100% apiladas por <b id="dimLabel21">Fabricante</b> · bloque izquierdo = YTD'25 vs YTD'26 · a la derecha, Ago'25 → Jul'26. Cada barra = 100% del <span class="metLow21">valor</span> de esa columna (mix).</div>
+  <div id="strip21"></div>
+  <div class="legend" id="legendMix21"></div>
+ </div>
+</section>
+
+<!-- ============ 2 · FABRICANTES Y MARCAS ============ -->
+<section id="comp-manuf">
+ <div class="sect-h"><span class="bar"></span><h2>3 · Competitividad — Fabricantes y Marcas</h2><span class="note">Share en valor</span></div>
+ <div class="filterbar" style="flex-direction:column;align-items:stretch">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+   <span class="flabel">Ver por</span>
+   <div class="ftoggle">
+    <button id="s2Total" class="on" onclick="s2Mode('total')">Total mercado</button>
+    <button id="s2Cli" onclick="s2Mode('cliente')">Por cliente</button>
+   </div>
+   <span class="fmini" id="s2Mini">Mostrando el <b>total del mercado</b> (7 cadenas del cluster).</span>
+  </div>
+  <div id="s2Zone" style="display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)">
+   <span class="flabel">Cadenas</span>
+   <div class="fchips" id="s2Chips"></div>
+   <span class="fmini" id="s2Sel"></span>
+  </div>
+  <div class="fnotice" id="s2Notice">⚠️ <b>Datos por cliente pendientes de cálculo.</b> Los shares por cadena se obtienen filtrando la base por <i>G Bandera</i> y, si elegís varias, <b>se suman las cadenas y recién ahí se saca el %</b>. Este cálculo se agrega a <code>1_build.py</code>. La vista <b>Total</b> es dato real.</div>
+ </div>
+ <div class="grid2" id="s2Wrap">
+  <div class="card">
+   <div class="sect-h" style="margin-bottom:6px"><span class="bar" style="height:20px"></span><h2 style="font-size:15px">3 · Share en VALOR</h2></div>
+   <div class="csub">Fabricante y principales marcas · pp de share, variación en bps</div>
+   <div class="scroll" id="s2_val"></div>
+   <div class="legend"><span><span class="sw" style="background:var(--posbg);border:1px solid var(--pos)"></span>Gana share</span><span><span class="sw" style="background:var(--negbg);border:1px solid var(--neg)"></span>Pierde share</span></div>
+  </div>
+  <div class="card">
+   <div class="sect-h" style="margin-bottom:6px"><span class="bar" style="height:20px"></span><h2 style="font-size:15px">3.2 · Variación por Formato</h2></div>
+   <div class="csub">Una columna por formato · variación de share YTD'26 vs YTD'25 (bps)</div>
+   <div class="scroll" id="s2_fmt"></div>
+   <div class="legend"><span>Verde = gana share en el formato · Rojo = pierde · "—" = sin presencia</span></div>
+  </div>
+ </div>
+</section>
+
+<!-- ============ 7 · LEADERS & BLEEDERS ============ -->
+<section id="comp-rank">
+ <div class="sect-h"><span class="bar"></span><h2>4 · Ranking Marca × Cadena — Leaders &amp; Bleeders de Share</h2><span class="note">Share en valor · var YTD en bps</span></div>
+ <div class="filterbar" id="r7bar" style="flex-direction:column;align-items:stretch">
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+   <span class="flabel">Ver por</span>
+   <div class="ftoggle">
+    <button id="r7Total" class="on" onclick="r7Mode('total')">Total mercado</button>
+    <button id="r7Fab" onclick="r7Mode('fabricante')">Por fabricante</button>
+   </div>
+   <span class="fmini" id="r7Mini">Mostrando <b>todos los fabricantes</b>.</span>
+  </div>
+  <div id="r7Zone" style="display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)">
+   <span class="flabel">Fabricante</span>
+   <div class="fchips" id="r7Chips"></div>
+   <span class="fmini" id="r7Sel"></span>
+  </div>
+ </div>
+ <div class="grid g2">
+  <div class="card"><h3 style="color:var(--pos)">🔺 Grandes LEADERS</h3><div class="csub">Combinaciones marca × cadena que más share ganan</div><div class="scroll" id="rank_ld"></div></div>
+  <div class="card"><h3 style="color:var(--neg)">🔻 Grandes BLEEDERS</h3><div class="csub">Combinaciones marca × cadena que más share pierden</div><div class="scroll" id="rank_bl"></div></div>
+ </div>
+</section>
+
+<!-- ============ 5 · ESTRATEGIA DEL CANAL · CICLO CORTO ============ -->
+<section id="ciclocorto">
+ <div class="sect-h"><span class="bar"></span><h2>5 · Estrategia del Canal — Ciclo Corto (Skip CC)</h2><span class="note">Peso del Ciclo Corto (diluido) dentro de SKIP</span></div>
+ <div class="card">
+  <div class="sect-h" style="margin-bottom:6px"><span class="bar" style="height:20px"></span><h2 style="font-size:15px">5.1 · Mix dentro de SKIP (base 100) — Concentrado · Ciclo Corto · Otro</h2>
+   <div class="seg" id="segMetricCC" style="margin-left:auto">
+    <button data-m="value" class="on">Valor</button>
+    <button data-m="volume">Volumen</button>
+   </div>
+  </div>
+  <div class="csub">Base 100 = <b>marca SKIP</b>. Barras 100% apiladas por submarca agrupada · <b>Ciclo Corto = diluido</b> · bloque izquierdo = YTD'25 vs YTD'26 · a la derecha, Ago'25 → Jul'26. Cada barra = 100% del <span class="metLowCC">valor</span> de SKIP en esa columna.</div>
+  <div id="stripCC"></div>
+  <div class="legend" id="legendMixCC"></div>
+ </div>
+ <div class="card" style="margin-top:16px">
+  <div class="sect-h" style="margin-bottom:8px"><span class="bar" style="height:20px"></span><h2 style="font-size:15px">5.2 · Skip CC dentro de SKIP, por cadena</h2></div>
+  <div class="scroll" id="ccTabla"></div>
+  <div class="legend">
+   <span><span class="sw" style="width:16px;height:3px;background:var(--pos)"></span>Tendencia en alza (Jul≥Feb)</span>
+   <span><span class="sw" style="width:16px;height:3px;background:var(--neg)"></span>Tendencia en baja</span>
+   <span>% de <b>Skip CC</b> (diluido) dentro de <b>SKIP</b> · en <b>valor</b></span>
+  </div>
+ </div>
+</section>
+
+<!-- ============ RESUMEN EJECUTIVO ============ -->
+<section id="exec">
+ <div class="exec">
+  <div class="sect-h"><span class="bar" style="background:#7de3c3"></span><h2>Resumen Ejecutivo</h2></div>
+  <div class="grid g3">
+   <div class="col"><h4>📉 Diagnóstico</h4><ul id="ex_diag"></ul></div>
+   <div class="col"><h4>⚠️ Puntos de atención</h4><ul id="ex_watch"></ul></div>
+   <div class="col"><h4>✅ Palancas para recuperar/defender share</h4><ul id="ex_act"></ul></div>
+  </div>
+ </div>
+</section>
+
+<div class="foot">Dashboard generado sobre <b>HC Shares Mensuales BASE.xlsx</b> · Unilever Home Care Argentina — CSP &amp; Performance. Cluster <b>Hiper &amp; Super</b> (CARREFOUR · COTO · LA ANONIMA · CENCOSUD · DIA · GDN · COOP. OBRERA). Mercado de <b>Heavy Duty</b>. Shares en <b>valor</b>; Δ share en <b>bps</b>. YTD = Ene–Jul.</div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const D0 = {"focus": ["UNILEVER", "DREAMCO", "MARCAS PROPIAS", "ECOVITA"], "maxy": 2026, "prevy": 2025, "lastm": 7, "lastm_name": "Jul", "prevm_name": "Jun", "ytd_lbl": "ene–jul", "months_l6": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "mkt_vol_fmt": [{"k": "Doypack", "ytd26": 26.01733565699999, "ytd25": 22.358959846, "ytd_var": 16.4, "jun": 3.9615397400000023, "may": 3.833224419999999, "mom_var": 3.3}, {"k": "Botella", "ytd26": 24.10728552200002, "ytd25": 27.458054724999986, "ytd_var": -12.2, "jun": 3.3580019709999998, "may": 3.5456539520000026, "mom_var": -5.3}, {"k": "Bolsa", "ytd26": 4.145447800000003, "ytd25": 5.1582850099999975, "ytd_var": -19.6, "jun": 0.5795076999999994, "may": 0.5705336999999998, "mom_var": 1.6}, {"k": "Promopack", "ytd26": 0.16402199999999995, "ytd25": 0.3206928, "ytd_var": -48.9, "jun": 0.022712999999999997, "may": 0.021369, "mom_var": 6.3}, {"k": "Otros", "ytd26": 0.004597200000000001, "ytd25": 0.0, "ytd_var": 0, "jun": 0.0030288, "may": 0.0013092, "mom_var": 131.3}], "mkt_vol_canal": [{"k": "CARREFOUR", "ytd26": 17.453941769000004, "ytd25": 16.545905380000004, "ytd_var": 5.5}, {"k": "COTO", "ytd26": 9.815954734000005, "ytd25": 10.057394787000002, "ytd_var": -2.4}, {"k": "LA ANONIMA", "ytd26": 6.807662999999999, "ytd25": 6.503036899999997, "ytd_var": 4.7}, {"k": "CENCOSUD", "ytd26": 5.807630877999999, "ytd25": 6.431415402999997, "ytd_var": -9.7}, {"k": "DIA", "ytd26": 6.541419800000002, "ytd25": 6.897469200000002, "ytd_var": -5.2}, {"k": "GDN", "ytd26": 4.860382197999997, "ytd25": 5.866816810999999, "ytd_var": -17.2}, {"k": "COOP. OBRERA", "ytd26": 3.1516957999999984, "ytd25": 2.9939539, "ytd_var": 5.3}], "manuf_value": [{"manuf": "UNILEVER", "ytd26": 67.7, "ytd25": 65.1, "ytd_var": 261, "jun": 66.5, "may": 68.1, "mom_var": -156, "brands": [{"k": "SKIP INT", "ytd26": 38.09, "ytd25": 33.63, "ytd_var": 445, "jun": 37.2, "may": 38.72, "mom_var": -152}, {"k": "ALA", "ytd26": 25.41, "ytd25": 27.06, "ytd_var": -165, "jun": 24.29, "may": 25.51, "mom_var": -123}, {"k": "GRANBY", "ytd26": 4.2, "ytd25": 4.38, "ytd_var": -18, "jun": 5.04, "may": 3.86, "mom_var": 118}, {"k": "DRIVE", "ytd26": 0.0, "ytd25": 0.01, "ytd_var": -1, "jun": 0.0, "may": 0.0, "mom_var": 0}]}, {"manuf": "DREAMCO", "ytd26": 20.3, "ytd25": 21.6, "ytd_var": -127, "jun": 21.8, "may": 20.2, "mom_var": 160, "brands": [{"k": "ARIEL", "ytd26": 12.49, "ytd25": 13.22, "ytd_var": -73, "jun": 13.55, "may": 13.85, "mom_var": -30}, {"k": "ZORRO", "ytd26": 4.69, "ytd25": 6.23, "ytd_var": -154, "jun": 5.27, "may": 3.94, "mom_var": 133}, {"k": "ACE", "ytd26": 2.73, "ytd25": 1.49, "ytd_var": 124, "jun": 2.63, "may": 2.05, "mom_var": 58}, {"k": "LIMZUL", "ytd26": 0.42, "ytd25": 0.67, "ytd_var": -24, "jun": 0.37, "may": 0.38, "mom_var": -1}]}, {"manuf": "MARCAS PROPIAS", "ytd26": 5.9, "ytd25": 7.3, "ytd_var": -145, "jun": 5.3, "may": 5.7, "mom_var": -37, "brands": [{"k": "MARCAS PROPIAS", "ytd26": 5.86, "ytd25": 7.31, "ytd_var": -145, "jun": 5.28, "may": 5.66, "mom_var": -37}]}, {"manuf": "ECOVITA", "ytd26": 2.7, "ytd25": 2.7, "ytd_var": 3, "jun": 2.8, "may": 2.6, "mom_var": 17, "brands": [{"k": "ECOVITA", "ytd26": 2.68, "ytd25": 2.65, "ytd_var": 3, "jun": 2.79, "may": 2.61, "mom_var": 17}]}], "manuf_volume": [{"manuf": "UNILEVER", "ytd26": 66.0, "ytd25": 62.6, "ytd_var": 342, "jun": 65.0, "may": 65.6, "mom_var": -57, "brands": [{"k": "SKIP INT", "ytd26": 34.1, "ytd25": 30.28, "ytd_var": 381, "jun": 33.75, "may": 34.13, "mom_var": -38}, {"k": "ALA", "ytd26": 27.34, "ytd25": 28.17, "ytd_var": -83, "jun": 25.35, "may": 27.46, "mom_var": -212}, {"k": "GRANBY", "ytd26": 4.59, "ytd25": 4.14, "ytd_var": 44, "jun": 5.92, "may": 3.99, "mom_var": 193}, {"k": "DRIVE", "ytd26": 0.0, "ytd25": 0.01, "ytd_var": -1, "jun": 0.0, "may": 0.0, "mom_var": 0}]}, {"manuf": "DREAMCO", "ytd26": 18.9, "ytd25": 19.0, "ytd_var": -4, "jun": 20.7, "may": 19.3, "mom_var": 139, "brands": [{"k": "ARIEL", "ytd26": 10.81, "ytd25": 11.03, "ytd_var": -21, "jun": 11.85, "may": 12.88, "mom_var": -103}, {"k": "ZORRO", "ytd26": 4.74, "ytd25": 5.83, "ytd_var": -110, "jun": 5.54, "may": 3.87, "mom_var": 167}, {"k": "ACE", "ytd26": 2.91, "ytd25": 1.41, "ytd_var": 150, "jun": 2.88, "may": 2.12, "mom_var": 77}, {"k": "LIMZUL", "ytd26": 0.48, "ytd25": 0.72, "ytd_var": -24, "jun": 0.42, "may": 0.43, "mom_var": -1}]}, {"manuf": "MARCAS PROPIAS", "ytd26": 7.9, "ytd25": 11.7, "ytd_var": -375, "jun": 6.9, "may": 8.2, "mom_var": -129, "brands": [{"k": "MARCAS PROPIAS", "ytd26": 7.94, "ytd25": 11.69, "ytd_var": -375, "jun": 6.92, "may": 8.21, "mom_var": -129}]}, {"manuf": "ECOVITA", "ytd26": 3.2, "ytd25": 3.3, "ytd_var": -13, "jun": 3.4, "may": 3.1, "mom_var": 30, "brands": [{"k": "ECOVITA", "ytd26": 3.22, "ytd25": 3.35, "ytd_var": -13, "jun": 3.36, "may": 3.06, "mom_var": 30}]}], "formats": ["Doypack", "Botella", "Bolsa", "Promopack", "Otros"], "manuf_value_fmt": [{"manuf": "UNILEVER", "fmt": {"Doypack": 537, "Botella": 294, "Bolsa": 2, "Promopack": 0, "Otros": 0}, "brands": [{"k": "SKIP INT", "fmt": {"Doypack": 591, "Botella": 271, "Bolsa": 322, "Promopack": 651, "Otros": 0}}, {"k": "ALA", "fmt": {"Doypack": 17, "Botella": -220, "Bolsa": 575, "Promopack": -651, "Otros": 0}}, {"k": "GRANBY", "fmt": {"Doypack": -72, "Botella": 243, "Bolsa": -886, "Promopack": 0, "Otros": 0}}, {"k": "DRIVE", "fmt": {"Doypack": 0, "Botella": 0, "Bolsa": -10, "Promopack": 0, "Otros": 0}}]}, {"manuf": "DREAMCO", "fmt": {"Doypack": -251, "Botella": -182, "Bolsa": 260, "Promopack": 0, "Otros": 0}, "brands": [{"k": "ARIEL", "fmt": {"Doypack": -218, "Botella": -158, "Bolsa": 278, "Promopack": 0, "Otros": 0}}, {"k": "ZORRO", "fmt": {"Doypack": -61, "Botella": -167, "Bolsa": -359, "Promopack": 0, "Otros": 0}}, {"k": "ACE", "fmt": {"Doypack": 76, "Botella": 143, "Bolsa": 304, "Promopack": 0, "Otros": 0}}, {"k": "LIMZUL", "fmt": {"Doypack": -48, "Botella": 0, "Bolsa": 36, "Promopack": 0, "Otros": 0}}]}, {"manuf": "MARCAS PROPIAS", "fmt": {"Doypack": -210, "Botella": -78, "Bolsa": -259, "Promopack": 0, "Otros": 0}, "brands": [{"k": "MARCAS PROPIAS", "fmt": {"Doypack": -210, "Botella": -78, "Bolsa": -259, "Promopack": 0, "Otros": 0}}]}, {"manuf": "ECOVITA", "fmt": {"Doypack": -54, "Botella": -6, "Bolsa": 0, "Promopack": 0, "Otros": 0}, "brands": [{"k": "ECOVITA", "fmt": {"Doypack": -54, "Botella": -6, "Bolsa": 0, "Promopack": 0, "Otros": 0}}]}], "varieties": {"UNILEVER": {"leaders": [{"k": "SKIP CONCENTRADO", "var": 482, "sh": 4.925}, {"k": "SKIP PERFECT RESULT", "var": 217, "sh": 16.458}, {"k": "GRANBY PARA DILUIR", "var": 97, "sh": 0.968}, {"k": "ALA MATIC", "var": 55, "sh": 8.683}, {"k": "ALA", "var": 49, "sh": 1.726}], "bleeders": [{"k": "SKIP PARA DILUIR", "var": -261, "sh": 15.461}, {"k": "ALA PARA DILUIR", "var": -238, "sh": 12.223}, {"k": "GRANBY ROSAS", "var": -73, "sh": 1.323}, {"k": "ALA MATIC ANTIBACTERIAL", "var": -45, "sh": 0.0}, {"k": "GRANBY LIMON", "var": -41, "sh": 1.909}]}, "DREAMCO": {"leaders": [{"k": "ARIEL PLATINUM", "var": 539, "sh": 10.79}, {"k": "ZORRO BICARBONATO", "var": 104, "sh": 1.19}, {"k": "ACE CLASICO COLOR", "var": 52, "sh": 1.016}, {"k": "ACE REGULAR", "var": 44, "sh": 1.019}, {"k": "ACE", "var": 27, "sh": 0.698}], "bleeders": [{"k": "ARIEL LIMPIEZA PROFUNDA", "var": -635, "sh": 0.51}, {"k": "ZORRO PLUS", "var": -242, "sh": 1.098}, {"k": "LIMZUL", "var": -24, "sh": 0.422}, {"k": "ZORRO EVOLUTION", "var": -15, "sh": 2.336}, {"k": "ZORRO", "var": -1, "sh": 0.068}]}, "MARCAS PROPIAS": {"leaders": [{"k": "CHECK", "var": 19, "sh": 0.251}, {"k": "COOPERATIVA", "var": 18, "sh": 0.188}, {"k": "BULNEZ", "var": 6, "sh": 0.567}, {"k": "CARREFOUR ECOPLANET", "var": 5, "sh": 0.051}, {"k": "BEST", "var": 2, "sh": 0.678}], "bleeders": [{"k": "DIA", "var": -140, "sh": 1.676}, {"k": "CARREFOUR EXPERT", "var": -45, "sh": 1.978}, {"k": "ALIADA", "var": -5, "sh": 0.037}, {"k": "HOME CARE", "var": -3, "sh": 0.421}, {"k": "CARREFOUR", "var": -2, "sh": 0.0}]}, "ECOVITA": {"leaders": [{"k": "ECOVITA", "var": 3, "sh": 2.682}], "bleeders": [{"k": "ECOVITA", "var": 3, "sh": 2.682}]}}, "brand_bandera": {"leaders": [{"brand": "ARIEL", "bandera": "DIA", "manuf": "DREAMCO", "y26": 14.96, "var": 1182}, {"brand": "SKIP INT", "bandera": "DIA", "manuf": "UNILEVER", "y26": 30.22, "var": 921}, {"brand": "SKIP INT", "bandera": "CENCOSUD", "manuf": "UNILEVER", "y26": 45.65, "var": 687}, {"brand": "SKIP INT", "bandera": "CARREFOUR", "manuf": "UNILEVER", "y26": 39.87, "var": 548}, {"brand": "SKIP INT", "bandera": "COTO", "manuf": "UNILEVER", "y26": 41.3, "var": 524}, {"brand": "SKIP INT", "bandera": "GDN", "manuf": "UNILEVER", "y26": 37.84, "var": 502}, {"brand": "ACE", "bandera": "GDN", "manuf": "DREAMCO", "y26": 4.27, "var": 316}, {"brand": "MARCAS PROPIAS", "bandera": "COOP. OBRERA", "manuf": "MARCAS PROPIAS", "y26": 3.15, "var": 268}, {"brand": "ACE", "bandera": "DIA", "manuf": "DREAMCO", "y26": 2.68, "var": 243}, {"brand": "GRANBY", "bandera": "LA ANONIMA", "manuf": "UNILEVER", "y26": 6.39, "var": 210}, {"brand": "ALA", "bandera": "COOP. OBRERA", "manuf": "UNILEVER", "y26": 32.21, "var": 207}, {"brand": "ACE", "bandera": "COOP. OBRERA", "manuf": "DREAMCO", "y26": 2.22, "var": 182}], "bleeders": [{"brand": "MARCAS PROPIAS", "bandera": "DIA", "manuf": "MARCAS PROPIAS", "y26": 15.71, "var": -1507}, {"brand": "ARIEL", "bandera": "GDN", "manuf": "DREAMCO", "y26": 7.24, "var": -706}, {"brand": "ALA", "bandera": "GDN", "manuf": "UNILEVER", "y26": 22.63, "var": -591}, {"brand": "ARIEL", "bandera": "CENCOSUD", "manuf": "DREAMCO", "y26": 15.46, "var": -371}, {"brand": "GRANBY", "bandera": "COOP. OBRERA", "manuf": "UNILEVER", "y26": 4.18, "var": -328}, {"brand": "GRANBY", "bandera": "DIA", "manuf": "UNILEVER", "y26": 8.37, "var": -327}, {"brand": "ALA", "bandera": "COTO", "manuf": "UNILEVER", "y26": 17.84, "var": -315}, {"brand": "ZORRO", "bandera": "CENCOSUD", "manuf": "DREAMCO", "y26": 6.26, "var": -315}, {"brand": "ZORRO", "bandera": "COOP. OBRERA", "manuf": "DREAMCO", "y26": 5.49, "var": -258}, {"brand": "SKIP INT", "bandera": "LA ANONIMA", "manuf": "UNILEVER", "y26": 32.9, "var": -235}, {"brand": "ARIEL", "bandera": "CARREFOUR", "manuf": "DREAMCO", "y26": 9.54, "var": -229}, {"brand": "ECOVITA", "bandera": "DIA", "manuf": "ECOVITA", "y26": 3.09, "var": -219}]}, "sec2": {"cadenas": ["CARREFOUR", "COTO", "LA ANONIMA", "CENCOSUD", "DIA", "GDN", "COOP. OBRERA"], "focus": ["UNILEVER", "DREAMCO", "MARCAS PROPIAS", "ECOVITA"], "formats": ["Doypack", "Botella", "Bolsa", "Promopack", "Otros"], "by_canal": {"CARREFOUR": {"market": {"v26": 44958471534.82549, "v25": 32495035697.688694, "vj": 7422892095.754741, "vm": 7175167984.598719}, "market_fmt": {"Doypack": {"v26": 22796797836.668556, "v25": 14680494544.308193}, "Botella": {"v26": 18342056166.06626, "v25": 13990196512.681257}, "Bolsa": {"v26": 3812771399.6295376, "v25": 3596383930.9237733}, "Promopack": {"v26": 6846132.461133957, "v25": 227960709.77546513}, "Otros": {"v26": 0.0, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 32630541613.19786, "v25": 21719250759.78527, "vj": 5229232657.470978, "vm": 5140238480.611039, "fmt": {"Doypack": {"v26": 14767252338.77036, "v25": 8562733954.186134}, "Botella": {"v26": 14916659128.962795, "v25": 10459767659.95165}, "Bolsa": {"v26": 2939784013.003567, "v25": 2468788435.872018}, "Promopack": {"v26": 6846132.461133957, "v25": 227960709.77546513}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 17924500570.96212, "v25": 11174214774.179253, "vj": 2992261114.73882, "vm": 2722771798.1764755, "fmt": {"Doypack": {"v26": 9495026585.789848, "v25": 5418547365.98614}, "Botella": {"v26": 7902635297.347444, "v25": 5292348798.057488}, "Bolsa": {"v26": 520449150.8538136, "v25": 313646687.9706759}, "Promopack": {"v26": 6389536.971014023, "v25": 149671922.16494626}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 13905963050.060247, "v25": 10402639170.619402, "vj": 2111052509.4434886, "vm": 2296767692.4527283, "fmt": {"Doypack": {"v26": 4640748749.094084, "v25": 3054654566.0212603}, "Botella": {"v26": 6850131661.926432, "v25": 5167418861.894164}, "Bolsa": {"v26": 2414626043.5496125, "v25": 2102276955.0934575}, "Promopack": {"v26": 456595.4901199341, "v25": 78288787.61051889}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 800077992.1754915, "v25": 142396814.98661914, "vj": 125919033.28866987, "vm": 120698989.98183563, "fmt": {"Doypack": {"v26": 631477003.8864318, "v25": 89532022.17873462}, "Botella": {"v26": 163892169.6889187, "v25": 0.0}, "Bolsa": {"v26": 4708818.600140929, "v25": 52864792.8078845}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 6743484472.410328, "v25": 6175265366.546333, "vj": 1390803164.814062, "vm": 1226451150.0583568, "fmt": {"Doypack": {"v26": 4011330232.8726454, "v25": 2902615455.434322}, "Botella": {"v26": 1865967562.5815759, "v25": 2248735066.457171}, "Bolsa": {"v26": 866186676.9561074, "v25": 1023914844.654839}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 4286941624.271887, "v25": 3842595518.8463025, "vj": 742572216.5001156, "vm": 912403067.006911, "fmt": {"Doypack": {"v26": 3039810082.1686325, "v25": 2211552864.7203536}, "Botella": {"v26": 1233942589.4147506, "v25": 1589416743.2390149}, "Bolsa": {"v26": 13188952.688502789, "v25": 41625910.886933394}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ZORRO", "v26": 1293724597.9179363, "v25": 1630461975.9520679, "vj": 444092086.6468678, "vm": 192490616.21308455, "fmt": {"Doypack": {"v26": 580012071.388104, "v25": 390021237.3277086}, "Botella": {"v26": 278212238.26767915, "v25": 520557449.0801494}, "Bolsa": {"v26": 435500288.26215297, "v25": 719883289.544209}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 919437407.1136056, "v25": 469826528.6296807, "vj": 176427087.4832183, "vm": 84472307.5315813, "fmt": {"Doypack": {"v26": 391435852.88577837, "v25": 240488288.00969136}, "Botella": {"v26": 353812734.8991462, "v25": 138318617.307796}, "Bolsa": {"v26": 174188819.3286811, "v25": 91019623.31219338}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 243380843.10690033, "v25": 232381343.11828327, "vj": 27711774.183860287, "vm": 37085159.30677996, "fmt": {"Doypack": {"v26": 72226.43013000488, "v25": 60553065.376569554}, "Botella": {"v26": 0.0, "v25": 442256.83021056664}, "Bolsa": {"v26": 243308616.67677033, "v25": 171386020.91150314}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 3955958159.135513, "v25": 3407343193.1931224, "vj": 544171411.5343068, "vm": 567335862.0242126, "fmt": {"Doypack": {"v26": 2502942780.0983124, "v25": 2085256934.7372627}, "Botella": {"v26": 1446224208.4673135, "v25": 1221489586.0476034}, "Bolsa": {"v26": 6791170.569886133, "v25": 100596672.40825644}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 3955958159.1355124, "v25": 3407343193.193123, "vj": 544171411.5343066, "vm": 567335862.0242126, "fmt": {"Doypack": {"v26": 2502942780.0983124, "v25": 2085256934.7372627}, "Botella": {"v26": 1446224208.4673135, "v25": 1221489586.0476034}, "Bolsa": {"v26": 6791170.569886133, "v25": 100596672.40825644}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 356669777.3889898, "v25": 234599375.77699068, "vj": 74971494.27607521, "vm": 61072142.26204495, "fmt": {"Doypack": {"v26": 353462503.13786983, "v25": 217396725.2153212}, "Botella": {"v26": 3207274.2511199713, "v25": 17202650.56166947}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 356669777.3889898, "v25": 234599375.77699068, "vj": 74971494.27607521, "vm": 61072142.26204495, "fmt": {"Doypack": {"v26": 353462503.13786983, "v25": 217396725.2153212}, "Botella": {"v26": 3207274.2511199713, "v25": 17202650.56166947}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "COTO": {"market": {"v26": 29424035124.34276, "v25": 22912736373.047783, "vj": 4605298093.269775, "vm": 4120344327.5095215}, "market_fmt": {"Doypack": {"v26": 15906761374.550156, "v25": 10860427139.604116}, "Botella": {"v26": 10341972304.537598, "v25": 9225844908.451416}, "Bolsa": {"v26": 2838587261.1427, "v25": 2512639072.9370728}, "Promopack": {"v26": 336714184.1123047, "v25": 313825252.0551758}, "Otros": {"v26": 0.0, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 18519582213.051376, "v25": 14252964953.939697, "vj": 2827296946.364868, "vm": 2607142394.4069824, "fmt": {"Doypack": {"v26": 9128948346.988632, "v25": 5658738705.565674}, "Botella": {"v26": 7247471581.459473, "v25": 6546285243.121582}, "Bolsa": {"v26": 1806448100.4909668, "v25": 1734115753.1972656}, "Promopack": {"v26": 336714184.1123047, "v25": 313825252.0551758}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 12151079808.992676, "v25": 8261866569.54541, "vj": 1953913191.6672363, "vm": 1703338387.1411133, "fmt": {"Doypack": {"v26": 6382900070.222168, "v25": 3646022149.6396484}, "Botella": {"v26": 4967128671.762695, "v25": 3948948126.1118164}, "Bolsa": {"v26": 585465281.5078125, "v25": 480953167.4111328}, "Promopack": {"v26": 215585785.5, "v25": 185943126.3828125}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 5248114125.466415, "v25": 4808721818.361328, "vj": 733993660.9151611, "vm": 805244651.1445312, "fmt": {"Doypack": {"v26": 1881095402.0640717, "v25": 1205397804.4382324}, "Botella": {"v26": 2280342909.6967773, "v25": 2597337117.0097656}, "Bolsa": {"v26": 965547415.0932617, "v25": 878104771.2409669}, "Promopack": {"v26": 121128398.61230469, "v25": 127882125.67236328}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 1120388278.5922852, "v25": 1182376566.032959, "vj": 139390093.7824707, "vm": 98559356.12133789, "fmt": {"Doypack": {"v26": 864952874.7023926, "v25": 807318751.487793}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 255435403.88989258, "v25": 375057814.54516613}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 8946515020.107178, "v25": 7256953462.283143, "vj": 1466976837.5908203, "vm": 1232021332.607666, "fmt": {"Doypack": {"v26": 5010163386.680542, "v25": 4042939774.848999}, "Botella": {"v26": 2904212472.7749023, "v25": 2435490367.6943364}, "Bolsa": {"v26": 1032139160.6517334, "v25": 778523319.7398072}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 5618646758.831787, "v25": 4477506753.391724, "vj": 1021233658.0627441, "vm": 869377769.8444824, "fmt": {"Doypack": {"v26": 3508223418.53125, "v25": 2859431490.500122}, "Botella": {"v26": 1947939345.3388672, "v25": 1584561738.2973635}, "Bolsa": {"v26": 162483994.96166992, "v25": 33513524.594238296}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ZORRO", "v26": 2069812027.0390625, "v25": 1940007696.3650515, "vj": 260458755.2512207, "vm": 232074389.39123535, "fmt": {"Doypack": {"v26": 1138864653.4750977, "v25": 848832120.4503176}, "Botella": {"v26": 520489775.10009766, "v25": 687049506.6323242}, "Bolsa": {"v26": 410457598.4638672, "v25": 404126069.2824098}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 882123385.3552246, "v25": 476833346.0122071, "vj": 125710822.32836914, "vm": 80369192.63256836, "fmt": {"Doypack": {"v26": 252979014.20751953, "v25": 233300811.14428717}, "Botella": {"v26": 435783352.3359375, "v25": 163879122.76464844}, "Bolsa": {"v26": 193361018.81176758, "v25": 79653412.10327151}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 375932848.8811035, "v25": 362605666.5141603, "vj": 59573601.94848633, "vm": 50199980.73937988, "fmt": {"Doypack": {"v26": 110096300.4666748, "v25": 101375352.7542725}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 265836548.4144287, "v25": 261230313.7598878}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 0, "v25": 0, "vj": 0, "vm": 0, "fmt": {"Doypack": {"v26": 0.0, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": []}, {"manuf": "ECOVITA", "v26": 1838898435.0300293, "v25": 1223218662.772339, "vj": 294960695.3901367, "vm": 266380004.2775879, "fmt": {"Doypack": {"v26": 1666515062.4719238, "v25": 1061693423.00647}, "Botella": {"v26": 172383372.55810547, "v25": 161525239.7658692}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 1838898435.0300293, "v25": 1223218662.772339, "vj": 294960695.3901367, "vm": 266380004.2775879, "fmt": {"Doypack": {"v26": 1666515062.4719238, "v25": 1061693423.00647}, "Botella": {"v26": 172383372.55810547, "v25": 161525239.7658692}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "LA ANONIMA": {"market": {"v26": 19476573214.7779, "v25": 14402011306.0414, "vj": 3106530005.1187, "vm": 3123228954.821}, "market_fmt": {"Doypack": {"v26": 8890929029.8907, "v25": 6105760421.2133}, "Botella": {"v26": 8656326006.484602, "v25": 6629183802.2959}, "Bolsa": {"v26": 1929288915.6026003, "v25": 1545502603.9393003}, "Promopack": {"v26": 29262.8, "v25": 121564478.59290001}, "Otros": {"v26": 0.0, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 13985199896.988699, "v25": 10550868137.0016, "vj": 2205938200.8974004, "vm": 2251110723.8863, "fmt": {"Doypack": {"v26": 5602431601.725799, "v25": 3747312603.2679005}, "Botella": {"v26": 6895603448.348, "v25": 5389225506.4339}, "Bolsa": {"v26": 1487135584.1148999, "v25": 1292765548.7069001}, "Promopack": {"v26": 29262.8, "v25": 121564478.59290001}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 6407808996.519099, "v25": 5076047504.710501, "vj": 967075040.2347999, "vm": 1124071732.9558, "fmt": {"Doypack": {"v26": 3017413807.8587003, "v25": 1906641054.6235}, "Botella": {"v26": 3230563399.4749, "v25": 3002100060.3945}, "Bolsa": {"v26": 159802526.3855, "v25": 101454795.1604}, "Promopack": {"v26": 29262.8, "v25": 65851594.5321}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 6333614977.9791, "v25": 4857689478.1563, "vj": 866883409.1621, "vm": 993953893.9604999, "fmt": {"Doypack": {"v26": 2151262545.1359997, "v25": 1491151794.9169002}, "Botella": {"v26": 3115945892.6077, "v25": 2387125446.0394}, "Bolsa": {"v26": 1066406540.2354, "v25": 923699353.1392001}, "Promopack": {"v26": 0.0, "v25": 55712884.0608}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 1243775922.4905, "v25": 617130578.1348, "vj": 371979751.5005001, "vm": 133085096.97, "fmt": {"Doypack": {"v26": 433755248.7311, "v25": 349519753.7275}, "Botella": {"v26": 549094156.2654, "v25": 0.0}, "Bolsa": {"v26": 260926517.494, "v25": 267610824.40730003}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "DRIVE", "v26": 0.0, "v25": 576.0, "vj": 0.0, "vm": 0.0, "fmt": {"Doypack": {"v26": 0.0, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 576.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 2623324696.2864, "v25": 1747727949.5578, "vj": 432622779.9491001, "vm": 405671449.4659, "fmt": {"Doypack": {"v26": 1348844154.2978, "v25": 1025836381.564}, "Botella": {"v26": 832327210.5009, "v25": 469467391.2714}, "Bolsa": {"v26": 442153331.48770005, "v25": 252424176.7224}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 1257387507.1783001, "v25": 817153586.2859999, "vj": 227277529.02380005, "vm": 201253108.3115, "fmt": {"Doypack": {"v26": 820814040.8926, "v25": 663147560.3234}, "Botella": {"v26": 278510527.5828, "v25": 140372039.5974}, "Bolsa": {"v26": 158062938.7029, "v25": 13633986.365200002}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ZORRO", "v26": 964458594.7536, "v25": 706090424.9983, "vj": 133395692.3529, "vm": 150369697.8504, "fmt": {"Doypack": {"v26": 388295502.6915, "v25": 219938929.3815}, "Botella": {"v26": 361652441.0015, "v25": 265364797.23000002}, "Bolsa": {"v26": 214510651.0606, "v25": 220786698.3868}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 401228044.3545, "v25": 187352361.2035, "vj": 71943438.5724, "vm": 54048643.304, "fmt": {"Doypack": {"v26": 139484060.7137, "v25": 105618314.7891}, "Botella": {"v26": 192164241.9166, "v25": 63730554.444}, "Bolsa": {"v26": 69579741.7242, "v25": 18003491.9704}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 250550.0, "v25": 37131577.07, "vj": 6120.0, "vm": 0.0, "fmt": {"Doypack": {"v26": 250550.0, "v25": 37131577.07}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 1033754961.4827001, "v25": 761137048.7083, "vj": 171270551.00140002, "vm": 175954705.75750002, "fmt": {"Doypack": {"v26": 671109335.3109001, "v25": 380005253.5025}, "Botella": {"v26": 362645626.1718, "v25": 381131795.2058}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 1033754961.4827001, "v25": 761137048.7083, "vj": 171270551.0014, "vm": 175954705.75750002, "fmt": {"Doypack": {"v26": 671109335.3109001, "v25": 380005253.5025}, "Botella": {"v26": 362645626.1718, "v25": 381131795.2058}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 321084666.5072, "v25": 261524989.87750003, "vj": 50361061.8907, "vm": 54484159.61950001, "fmt": {"Doypack": {"v26": 321068588.5072, "v25": 257779759.41750002}, "Botella": {"v26": 16078.0, "v25": 3745230.46}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 321084666.5072, "v25": 261524989.8775, "vj": 50361061.8907, "vm": 54484159.61950001, "fmt": {"Doypack": {"v26": 321068588.5072, "v25": 257779759.41750002}, "Botella": {"v26": 16078.0, "v25": 3745230.46}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "CENCOSUD": {"market": {"v26": 18653687006.857635, "v25": 15495170723.512165, "vj": 2544402184.481316, "vm": 2971203018.904097}, "market_fmt": {"Doypack": {"v26": 9828255796.754507, "v25": 7699526477.55968}, "Botella": {"v26": 7081210969.572634, "v25": 6261277465.18931}, "Bolsa": {"v26": 1567137708.203354, "v25": 1425522273.6261053}, "Promopack": {"v26": 133955190.99999428, "v25": 108844507.13707045}, "Otros": {"v26": 43127341.32714844, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 12588466260.712305, "v25": 9615981507.646719, "vj": 1603559647.9489355, "vm": 2198131178.6630645, "fmt": {"Doypack": {"v26": 5884140870.326425, "v25": 4230853455.3335104}, "Botella": {"v26": 5641914480.888199, "v25": 4434616372.23861}, "Bolsa": {"v26": 928455718.4976871, "v25": 841667172.9375271}, "Promopack": {"v26": 133955190.99999428, "v25": 108844507.13707045}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 8516292744.327195, "v25": 6009414218.295651, "vj": 1090428966.85135, "vm": 1493363775.707343, "fmt": {"Doypack": {"v26": 4088493502.6035614, "v25": 2788919616.5329037}, "Botella": {"v26": 4043811809.9060755, "v25": 3001888779.1770325}, "Bolsa": {"v26": 260550625.5265479, "v25": 147404823.8273918}, "Promopack": {"v26": 123436806.2910099, "v25": 71200998.75832368}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 3416800061.3726726, "v25": 3000422157.7155285, "vj": 404215925.06493163, "vm": 613765496.8338789, "fmt": {"Doypack": {"v26": 1326423150.0353475, "v25": 992781654.564736}, "Botella": {"v26": 1432496526.1063607, "v25": 1432727593.0615778}, "Bolsa": {"v26": 647362000.5219803, "v25": 537269401.7104678}, "Promopack": {"v26": 10518384.708984375, "v25": 37643508.37874676}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 655373455.0124367, "v25": 606144631.6355385, "vj": 108914756.03265381, "vm": 91001906.12184252, "fmt": {"Doypack": {"v26": 469224217.68751454, "v25": 449152184.23587096}, "Botella": {"v26": 165606144.8757633, "v25": 0.0}, "Bolsa": {"v26": 20543092.449158907, "v25": 156992447.39966756}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "DRIVE", "v26": 0.0, "v25": 500.0, "vj": 0.0, "vm": 0.0, "fmt": {"Doypack": {"v26": 0.0, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 500.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 4780455384.040408, "v25": 4913281321.560551, "vj": 711983672.1809692, "vm": 556547339.6154883, "fmt": {"Doypack": {"v26": 3044938541.491723, "v25": 2768739901.6635194}, "Botella": {"v26": 1096834852.843018, "v25": 1560686319.208453}, "Bolsa": {"v26": 638681989.7056668, "v25": 583855100.6885782}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 2884781992.6989803, "v25": 2970883056.707032, "vj": 467943233.0753784, "vm": 353620058.6361206, "fmt": {"Doypack": {"v26": 2089344262.5429008, "v25": 1957141392.3447738}, "Botella": {"v26": 665386924.7311289, "v25": 1006168763.9123073}, "Bolsa": {"v26": 130050805.42495036, "v25": 7572900.449951172}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ZORRO", "v26": 1167535021.547179, "v25": 1458368762.6062684, "vj": 154883852.62902832, "vm": 132823664.23708837, "fmt": {"Doypack": {"v26": 566071508.6161108, "v25": 561187642.4999571}, "Botella": {"v26": 224489679.75789976, "v25": 390261187.5921014}, "Bolsa": {"v26": 376973833.1731684, "v25": 506919932.5142103}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 715681262.1222872, "v25": 401045525.0612673, "vj": 88780326.01513672, "vm": 69793286.74227935, "fmt": {"Doypack": {"v26": 377065662.6607497, "v25": 167426889.6328061}, "Botella": {"v26": 206958248.35398945, "v25": 164256367.7040444}, "Bolsa": {"v26": 131657351.10754797, "v25": 69362267.7244168}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 12457107.671962261, "v25": 82983977.1859825, "vj": 376260.46142578125, "vm": 310330.0, "fmt": {"Doypack": {"v26": 12457107.671962261, "v25": 82983977.1859825}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 641654818.849474, "v25": 524364273.0197471, "vj": 82445888.95676757, "vm": 106922569.1017064, "fmt": {"Doypack": {"v26": 309216231.019533, "v25": 293462514.2391702}, "Botella": {"v26": 332438587.8299409, "v25": 230901758.78057685}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 641654818.849474, "v25": 524364273.0197471, "vj": 82445888.95676757, "vm": 106922569.1017064, "fmt": {"Doypack": {"v26": 309216231.019533, "v25": 293462514.2391702}, "Botella": {"v26": 332438587.8299409, "v25": 230901758.78057685}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 264610443.12409043, "v25": 212689438.48782846, "vj": 35859606.22375488, "vm": 28915925.11836744, "fmt": {"Doypack": {"v26": 264610443.12409043, "v25": 210533679.22794077}, "Botella": {"v26": 0.0, "v25": 2155759.259887696}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 264610443.12409043, "v25": 212689438.48782846, "vj": 35859606.22375488, "vm": 28915925.11836744, "fmt": {"Doypack": {"v26": 264610443.12409043, "v25": 210533679.22794077}, "Botella": {"v26": 0.0, "v25": 2155759.259887696}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "DIA": {"market": {"v26": 16248892647.247196, "v25": 11549774021.536543, "vj": 2428607219.2423706, "vm": 2465298830.278137}, "market_fmt": {"Doypack": {"v26": 9948753540.551155, "v25": 5163289201.726147}, "Botella": {"v26": 5023077262.046567, "v25": 4605565772.234955}, "Bolsa": {"v26": 1276878856.3096313, "v25": 1778909859.355225}, "Promopack": {"v26": 182988.33984375, "v25": 2009188.2202148442}, "Otros": {"v26": 0.0, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 9815966717.94318, "v25": 6530941580.395632, "vj": 1537554062.4176025, "vm": 1481142225.3186035, "fmt": {"Doypack": {"v26": 5650651301.245735, "v25": 2723025729.991883}, "Botella": {"v26": 2890292310.318906, "v25": 2270666144.499024}, "Bolsa": {"v26": 1274840118.0386963, "v25": 1535240517.6845098}, "Promopack": {"v26": 182988.33984375, "v25": 2009188.2202148442}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 4910009571.280522, "v25": 2426475872.052796, "vj": 698719792.545166, "vm": 909335397.2572021, "fmt": {"Doypack": {"v26": 3096351053.434639, "v25": 1187736687.3569949}, "Botella": {"v26": 1593471147.1904879, "v25": 1066847985.9882812}, "Bolsa": {"v26": 220039634.31555176, "v25": 171017690.55712897}, "Promopack": {"v26": 147736.33984375, "v25": 873508.150390625}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 3546630654.253113, "v25": 2760517153.0861826, "vj": 590118515.6787109, "vm": 339300172.8951416, "fmt": {"Doypack": {"v26": 1594920847.3308716, "v25": 847188924.3720095}, "Botella": {"v26": 900904732.0195312, "v25": 1203818158.5107427}, "Bolsa": {"v26": 1050769822.90271, "v25": 708374390.1336061}, "Promopack": {"v26": 35252.0, "v25": 1135680.0698242192}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 1359326492.409546, "v25": 1343948555.2566533, "vj": 248715754.1937256, "vm": 232506655.16625977, "fmt": {"Doypack": {"v26": 959379400.4802246, "v25": 688100118.2628785}, "Botella": {"v26": 395916431.1088867, "v25": 0.0}, "Bolsa": {"v26": 4030660.8204345703, "v25": 655848436.9937748}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 2867424747.850952, "v25": 391733388.31689477, "vj": 387187230.51049805, "vm": 495050495.14001465, "fmt": {"Doypack": {"v26": 2338771305.058716, "v25": 312700094.0935061}, "Botella": {"v26": 528653442.7922363, "v25": 79033294.22338867}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 2431156273.491577, "v25": 362724242.1859133, "vj": 332714638.38171387, "vm": 452135545.3171387, "fmt": {"Doypack": {"v26": 1902502830.6993408, "v25": 283690947.96252465}, "Botella": {"v26": 528653442.7922363, "v25": 79033294.22338867}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 436268474.359375, "v25": 29009146.13098144, "vj": 54472592.12878418, "vm": 42914949.82287598, "fmt": {"Doypack": {"v26": 436268474.359375, "v25": 29009146.13098144}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 2552890347.5637207, "v25": 3555532140.546886, "vj": 348824039.864624, "vm": 368429790.5205078, "fmt": {"Doypack": {"v26": 947758359.2883301, "v25": 1250822014.5270803}, "Botella": {"v26": 1603093250.0044556, "v25": 2061040784.3490906}, "Bolsa": {"v26": 2038738.2709350586, "v25": 243669341.67071533}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 2552890347.5637207, "v25": 3555532140.5468864, "vj": 348824039.864624, "vm": 368429790.5205078, "fmt": {"Doypack": {"v26": 947758359.2883301, "v25": 1250822014.5270803}, "Botella": {"v26": 1603093250.0044556, "v25": 2061040784.3490906}, "Bolsa": {"v26": 2038738.2709350586, "v25": 243669341.67071533}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 502073745.88391113, "v25": 610293270.6596984, "vj": 61099760.88964844, "vm": 54467181.53430176, "fmt": {"Doypack": {"v26": 502073745.88391113, "v25": 610293270.6596982}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 502073745.88391113, "v25": 610293270.6596982, "vj": 61099760.88964844, "vm": 54467181.53430176, "fmt": {"Doypack": {"v26": 502073745.88391113, "v25": 610293270.6596982}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "GDN": {"market": {"v26": 13918425102.584873, "v25": 12066619740.380266, "vj": 1976796091.3912659, "vm": 2002147235.2385592}, "market_fmt": {"Doypack": {"v26": 6215653519.940733, "v25": 4359074785.798354}, "Botella": {"v26": 5810858673.964081, "v25": 6035959169.895442}, "Bolsa": {"v26": 1719072789.971319, "v25": 1560385696.7519794}, "Promopack": {"v26": 156964049.78100586, "v25": 111200087.93448928}, "Otros": {"v26": 15876068.927734375, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 9231128311.931011, "v25": 8081634726.317854, "vj": 1311853439.741272, "vm": 1230638124.079967, "fmt": {"Doypack": {"v26": 3402119377.3077755, "v25": 1860558588.7092056}, "Botella": {"v26": 4477049834.126465, "v25": 4934450262.683612}, "Bolsa": {"v26": 1194995050.7157648, "v25": 1175425786.9905467}, "Promopack": {"v26": 156964049.78100586, "v25": 111200087.93448928}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "SKIP INT", "v26": 5266180342.548122, "v25": 3959390727.0438323, "vj": 674159947.6445312, "vm": 665162071.5398669, "fmt": {"Doypack": {"v26": 2435001290.396948, "v25": 1241653406.8527875}, "Botella": {"v26": 2635783600.6294556, "v25": 2522534270.733033}, "Bolsa": {"v26": 111859724.06346679, "v25": 126747498.14450647}, "Promopack": {"v26": 83535727.45825195, "v25": 68455551.3135052}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ALA", "v26": 3150088863.525528, "v25": 3444393580.0362263, "vj": 495380476.6057739, "vm": 428816353.9463501, "fmt": {"Doypack": {"v26": 640687667.1020508, "v25": 355581343.79458576}, "Botella": {"v26": 1733682097.871521, "v25": 2409756386.7679615}, "Bolsa": {"v26": 702290776.2292023, "v25": 636311312.8526951}, "Promopack": {"v26": 73428322.3227539, "v25": 42744536.620984085}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 814858725.1573486, "v25": 677850419.2377949, "vj": 142313015.4909668, "vm": 136659698.59375, "fmt": {"Doypack": {"v26": 326430039.10876465, "v25": 263323838.0618325}, "Botella": {"v26": 107584135.62548828, "v25": 2159605.1826171894}, "Bolsa": {"v26": 380844550.4230957, "v25": 412366975.99334526}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "DRIVE", "v26": 380.70001220703125, "v25": 0.0, "vj": 0.0, "vm": 0.0, "fmt": {"Doypack": {"v26": 380.70001220703125, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 2723369195.702057, "v25": 2790710075.1764607, "vj": 374736678.47366333, "vm": 459392224.8114624, "fmt": {"Doypack": {"v26": 1451667511.6193542, "v25": 1512144587.1653101}, "Botella": {"v26": 747623944.8271484, "v25": 893606183.0497056}, "Bolsa": {"v26": 524077739.2555542, "v25": 384959304.96144485}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ZORRO", "v26": 1122246995.9145813, "v25": 931675331.8663903, "vj": 163528105.35110474, "vm": 161287125.52178955, "fmt": {"Doypack": {"v26": 552499713.6494141, "v25": 405265593.5040512}, "Botella": {"v26": 198722000.81970215, "v25": 185787313.61000067}, "Bolsa": {"v26": 371025281.4454651, "v25": 340622424.7523384}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ARIEL", "v26": 1007081001.5300293, "v25": 1724750121.8795817, "vj": 138313580.32104492, "vm": 220788334.22875977, "fmt": {"Doypack": {"v26": 632921970.8012695, "v25": 1054212761.1740611}, "Botella": {"v26": 374159030.72875977, "v25": 670537360.7055207}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 594041198.2574463, "v25": 134276121.29054263, "vj": 72894992.80151367, "vm": 77316765.06091309, "fmt": {"Doypack": {"v26": 266245827.16867065, "v25": 52666232.48719789}, "Botella": {"v26": 174742913.27868652, "v25": 37273008.59423829}, "Bolsa": {"v26": 153052457.8100891, "v25": 44336880.20910646}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 0.0, "v25": 8500.139945983885, "vj": 0.0, "vm": 0.0, "fmt": {"Doypack": {"v26": 0.0, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 8500.139945983885}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 439092006.8127136, "v25": 167938890.46478274, "vj": 54494011.38684082, "vm": 48509965.985961914, "fmt": {"Doypack": {"v26": 56321451.490722656, "v25": 100774520.1808777}, "Botella": {"v26": 382770555.32199097, "v25": 67164370.28390506}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 439092006.8127136, "v25": 167938890.46478274, "vj": 54494011.38684082, "vm": 48509965.985961914, "fmt": {"Doypack": {"v26": 56321451.490722656, "v25": 100774520.1808777}, "Botella": {"v26": 382770555.32199097, "v25": 67164370.28390506}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 803404245.9133606, "v25": 523440812.2934648, "vj": 141268879.8829956, "vm": 141419969.83966064, "fmt": {"Doypack": {"v26": 695485106.4414368, "v25": 442140864.74945843}, "Botella": {"v26": 107919139.47192383, "v25": 81299947.54400635}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ECOVITA", "v26": 803404245.9133606, "v25": 523440812.2934648, "vj": 141268879.8829956, "vm": 141419969.83966064, "fmt": {"Doypack": {"v26": 695485106.4414368, "v25": 442140864.74945843}, "Botella": {"v26": 107919139.47192383, "v25": 81299947.54400635}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}]}, "COOP. OBRERA": {"market": {"v26": 9681991852.515503, "v25": 6576377163.652834, "vj": 1552965299.3986816, "vm": 1364541500.7947998}, "market_fmt": {"Doypack": {"v26": 3658342606.8997803, "v25": 2354168536.6143804}, "Botella": {"v26": 5381330651.484375, "v25": 3659836378.671876}, "Bolsa": {"v26": 642157824.1313477, "v25": 560487355.8275148}, "Promopack": {"v26": 160770.0, "v25": 1884892.5390625}, "Otros": {"v26": 0.0, "v25": 0.0}}, "manuf": [{"manuf": "UNILEVER", "v26": 6376143215.723633, "v25": 4425065780.748781, "vj": 1010821893.3706055, "vm": 903972292.0361328, "fmt": {"Doypack": {"v26": 1971572926.1159668, "v25": 1241142009.7143562}, "Botella": {"v26": 3991554081.1328125, "v25": 2775014033.9106455}, "Bolsa": {"v26": 412855438.4748535, "v25": 407024844.58471686}, "Promopack": {"v26": 160770.0, "v25": 1884892.5390625}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ALA", "v26": 3118751691.2313232, "v25": 1982472241.7155771, "vj": 539205385.5625, "vm": 446906578.02685547, "fmt": {"Doypack": {"v26": 691118814.4719238, "v25": 538753962.9897465}, "Botella": {"v26": 2107267079.7519531, "v25": 1225588759.4252934}, "Bolsa": {"v26": 320205027.0074463, "v25": 216252565.76147464}, "Promopack": {"v26": 160770.0, "v25": 1876953.5390625}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "SKIP INT", "v26": 2851840004.012207, "v25": 1938834174.667237, "vj": 416502190.8276367, "vm": 372616560.11035156, "fmt": {"Doypack": {"v26": 1035299081.965332, "v25": 376217603.34106463}, "Botella": {"v26": 1791661025.6328125, "v25": 1549157613.485352}, "Bolsa": {"v26": 24879896.4140625, "v25": 13451018.840820318}, "Promopack": {"v26": 0.0, "v25": 7939.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "GRANBY", "v26": 404840190.18029785, "v25": 490569572.17456067, "vj": 55067994.98046875, "vm": 84410743.89892578, "fmt": {"Doypack": {"v26": 245155029.67871094, "v25": 326079188.38354504}, "Botella": {"v26": 92625975.74804688, "v25": 267661.0}, "Bolsa": {"v26": 67059184.75354004, "v25": 164222722.79101565}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "DRIVE", "v26": 711330.2998046875, "v25": 13189792.19140625, "vj": 46322.0, "vm": 38410.0, "fmt": {"Doypack": {"v26": 0.0, "v25": 91255.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 711330.2998046875, "v25": 13098537.19140625}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "DREAMCO", "v26": 2295956916.9195557, "v25": 1678719793.702271, "vj": 394471307.8383789, "vm": 321106483.34069824, "fmt": {"Doypack": {"v26": 1099202887.3255615, "v25": 858066041.7849122}, "Botella": {"v26": 967531912.9375, "v25": 667191240.6745608}, "Bolsa": {"v26": 229222116.65649414, "v25": 153462511.24279788}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "ARIEL", "v26": 1537340733.4719238, "v25": 1067825475.6960449, "vj": 273489440.7470703, "vm": 207679378.58544922, "fmt": {"Doypack": {"v26": 839071194.1513672, "v25": 598428757.4396974}, "Botella": {"v26": 668826726.9902344, "v25": 462825011.76733404}, "Bolsa": {"v26": 29442812.330322266, "v25": 6571706.48901367}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ZORRO", "v26": 531976971.2108154, "v25": 531163159.932007, "vj": 88936427.96118164, "vm": 45952073.46838379, "fmt": {"Doypack": {"v26": 239431094.81018066, "v25": 183889357.71313483}, "Botella": {"v26": 114055055.89941406, "v25": 203324554.90722668}, "Bolsa": {"v26": 178490820.5012207, "v25": 143949247.31164554}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "ACE", "v26": 214967477.96118164, "v25": 26129996.168457035, "vj": 31601483.14013672, "vm": 66894730.31640625, "fmt": {"Doypack": {"v26": 9028864.088378906, "v25": 22146764.726318363}, "Botella": {"v26": 184650130.04785156, "v25": 1041674.0}, "Bolsa": {"v26": 21288483.824951172, "v25": 2941557.4421386723}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}, {"k": "LIMZUL", "v26": 11671734.275634766, "v25": 53601161.905761726, "vj": 443955.9899902344, "vm": 580300.9704589844, "fmt": {"Doypack": {"v26": 11671734.275634766, "v25": 53601161.905761726}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "MARCAS PROPIAS", "v26": 304828264.5332031, "v25": 30598778.290649414, "vj": 47928573.82299805, "vm": 47037547.36669922, "fmt": {"Doypack": {"v26": 137782271.15771484, "v25": 30598778.290649414}, "Botella": {"v26": 167045993.37548828, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": [{"k": "MARCAS PROPIAS", "v26": 304828264.5332031, "v25": 30598778.290649414, "vj": 47928573.82299805, "vm": 47037547.36669922, "fmt": {"Doypack": {"v26": 137782271.15771484, "v25": 30598778.290649414}, "Botella": {"v26": 167045993.37548828, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}}]}, {"manuf": "ECOVITA", "v26": 0, "v25": 0, "vj": 0, "vm": 0, "fmt": {"Doypack": {"v26": 0.0, "v25": 0.0}, "Botella": {"v26": 0.0, "v25": 0.0}, "Bolsa": {"v26": 0.0, "v25": 0.0}, "Promopack": {"v26": 0.0, "v25": 0.0}, "Otros": {"v26": 0.0, "v25": 0.0}}, "brands": []}]}}}, "summary": {"val_ytd_var": 31.9, "vol_ytd_var": -1.6, "vol_mom_var": -0.6, "val_mom_var": 1.8}, "top_comp_manuf": {"manuf": "DREAMCO", "ytd26": 20.3, "ytd_var": -127}, "meta": {"nreg": 1163, "ncanales": 7, "nformatos": 5, "nbanderas": 7, "nareas": 2, "val_total": 152362076483}};
+const D1 = {"lastm_name": "Jul", "maxy": 2026, "prevy": 2025, "l12_labels": ["Ago'25", "Sep'25", "Oct'25", "Nov'25", "Dic'25", "Ene'26", "Feb'26", "Mar'26", "Abr'26", "May'26", "Jun'26", "Jul'26"], "value": {"canal": {"rows": [{"k": "CARREFOUR", "val26": 44958471534.825516, "m12": [5003356704.641266, 5185669240.365349, 5171215043.766637, 4984635171.800484, 5487017003.131654, 5669416803.43891, 5325373516.319307, 6499019525.126805, 6321485455.9177265, 6545116153.669285, 7175167984.598721, 7422892095.754742], "w": 29.5, "w25": 28.1, "var": 1.4}, {"k": "COTO", "val26": 29424035124.34276, "m12": [3708346440.317383, 3438447074.1036987, 3917522106.970459, 3626197781.8690186, 3663768854.7437744, 3761029662.392807, 3743307789.449707, 4428817129.9210205, 4169102632.472168, 4596135489.327759, 4120344327.5095215, 4605298093.269775], "w": 19.3, "w25": 19.8, "var": -0.5}, {"k": "LA ANONIMA", "val26": 19476573214.777893, "m12": [2299334877.5808997, 2359605116.4734006, 2407137883.4127007, 2223453212.2652993, 2152973867.5570993, 2641685607.3277993, 2472322928.1726003, 2738167029.3608, 2679564807.849101, 2715073882.1279, 3123228954.8209996, 3106530005.1187005], "w": 12.8, "w25": 12.5, "var": 0.3}, {"k": "CENCOSUD", "val26": 18653687006.857635, "m12": [2304887471.725091, 2710230200.767442, 2357999897.2384768, 2368943356.5575047, 2706814655.277215, 2539335933.966729, 2301222490.11849, 2998200309.1814446, 2487980898.488515, 2811342171.7170467, 2971203018.904097, 2544402184.4813166], "w": 12.2, "w25": 13.4, "var": -1.2}, {"k": "DIA", "val26": 16248892647.247196, "m12": [1771087908.9484406, 1839343250.3806148, 2076468265.5706177, 1913152176.7835522, 1826075853.2736206, 2041178533.1607103, 1836476077.7894287, 2756713031.7910767, 2351040503.8447876, 2369578451.140686, 2465298830.278137, 2428607219.2423706], "w": 10.7, "w25": 10.0, "var": 0.7}, {"k": "GDN", "val26": 13918425102.584873, "m12": [2069100770.7521362, 1999953253.7877197, 1884821180.015915, 1807698447.3924866, 1799783926.1508808, 1835103439.3884735, 1664187008.68956, 2486132294.014282, 1813181168.4916992, 2140877865.3710327, 2002147235.2385592, 1976796091.3912659], "w": 9.1, "w25": 10.4, "var": -1.3}, {"k": "COOP. OBRERA", "val26": 9681991852.515503, "m12": [1054843621.0252687, 1038852377.0283208, 1226855668.432495, 1206783506.8132324, 1146981215.8886719, 1317825252.5130615, 1202168467.6704102, 1302086034.3377686, 1492535338.9228516, 1449869958.8779297, 1364541500.7947998, 1552965299.3986816], "w": 6.4, "w25": 5.7, "var": 0.7}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [44958471534.825516, 29424035124.34276, 19476573214.777893, 18653687006.857635, 16248892647.247196, 13918425102.584873, 9681991852.515503], "ytd25_by": [32495035697.68868, 22912736373.047783, 14402011306.041399, 15495170723.512175, 11549774021.536541, 12066619740.380268, 6576377163.652834]}, "dims": {"Tier": {"rows": [{"k": "TIER 1", "val26": 77084066012.6836, "m12": [9169037801.55473, 9473434749.205967, 9332504788.126999, 9041713941.052134, 9391497210.845493, 9726436074.3584, 8659458801.086071, 12221608282.322262, 10708618092.947605, 11562236875.726074, 12208625427.508455, 11997082458.73469], "w": 50.6, "w25": 47.0, "var": 3.6}, {"k": "TIER 2", "val26": 50033464881.7952, "m12": [5724916376.303159, 5978362929.650202, 6315512949.572582, 5840196526.897394, 6029980378.93662, 6690964696.101644, 6631244979.233482, 7471940880.229656, 7039936113.636382, 7275840386.146914, 7315562281.352596, 7607975545.094528], "w": 32.8, "w25": 34.8, "var": -1.9}, {"k": "TIER 3", "val26": 25244545588.6726, "m12": [3317003617.1326003, 3120302834.0503826, 3394002307.7077165, 3248953185.5320506, 3361937786.2408037, 3388174461.728444, 3254354497.889946, 3515586191.1812787, 3566336599.4028645, 3789916710.358649, 3697744143.283786, 4032432984.8276343], "w": 16.6, "w25": 18.2, "var": -1.6}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [77084066012.6836, 50033464881.7952, 25244545588.6726], "ytd25_by": [54285277993.12951, 40179095975.90729, 21033351056.822895]}, "Formato": {"rows": [{"k": "Doypack", "val26": 77245493705.25562, "m12": [8257557030.005625, 8284026539.039404, 8722216939.656471, 8527746439.359921, 9390726865.433622, 9661955376.805872, 9373130619.231705, 12061934753.006523, 10789102096.649532, 11180789835.61103, 11887183981.09377, 12291397042.857162], "w": 50.7, "w25": 44.3, "var": 6.3}, {"k": "Botella", "val26": 60636832034.156136, "m12": [7967748146.650553, 8247951744.723645, 8247148585.837496, 7642862516.301966, 7371830368.096752, 8112504548.04092, 7298646063.721112, 9038849365.267944, 8515189024.89488, 9308285158.245417, 9233055930.548698, 9130301943.437143], "w": 39.8, "w25": 43.6, "var": -3.8}, {"k": "Bolsa", "val26": 13785894754.990492, "m12": [1879371508.0313506, 1933704841.7841883, 1985952112.7123206, 1876178666.3130882, 1930567247.610025, 1934668783.6958897, 1786989645.7251554, 2008986983.0820866, 1930615770.3501465, 2044810364.143263, 1997433773.5586402, 2082389434.435307], "w": 9.0, "w25": 11.2, "var": -2.2}, {"k": "Promopack", "val26": 634852578.4942825, "m12": [106281110.30295588, 106417387.35930964, 86702407.20101202, 84076031.5066052, 90290894.8825199, 96446523.64580536, 86291949.53152275, 99364252.37664795, 79983914.09228516, 90999170.27294922, 87663047.07165413, 94103721.50341797], "w": 0.4, "w25": 0.8, "var": -0.4}, {"k": "Otros", "val26": 59003410.25488281, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3109443.958984375, 16595119.872070312, 39298846.423828125], "w": 0.0, "w25": 0.0, "var": 0.0}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [77245493705.25562, 60636832034.156136, 13785894754.990492, 634852578.4942825, 59003410.25488281], "ytd25_by": [51222741106.82416, 50407864009.42015, 12979830793.360975, 887289116.2543778, 0.0]}, "Tamaño": {"rows": [{"k": "2001 - 3000", "val26": 63143712065.5067, "m12": [7144186935.571483, 7155103972.174065, 7445431567.587266, 7214387309.827715, 7959983133.3876915, 7860202329.13188, 7727642773.346228, 9741555889.844942, 8845445942.088697, 9139567321.645748, 9845736948.518194, 9983560860.931], "w": 41.4, "w25": 39.9, "var": 1.6}, {"k": "401 - 500", "val26": 54187885267.88121, "m12": [6961213041.134417, 7227625867.057222, 7150169982.173654, 6811074660.403313, 6504185762.3174715, 7230309076.117744, 6375179769.7695055, 8012169682.806685, 7644460833.157606, 8397593814.720539, 8242277915.221675, 8285894176.087436], "w": 35.6, "w25": 39.5, "var": -3.9}, {"k": "701 - 800", "val26": 30429108375.11623, "m12": [3392430690.956721, 3553567043.9080324, 3767997548.657487, 3502346954.6816263, 3684617386.569929, 4080301945.6623, 3839185790.0476317, 4698986349.239926, 4198877945.0706234, 4454308924.302948, 4487058966.812607, 4670388453.980201], "w": 20.0, "w25": 15.3, "var": 4.6}, {"k": "1001 - 2000", "val26": 2084995858.3210845, "m12": [391897557.95574284, 325327227.0876029, 377756979.5158684, 301802973.3834392, 316833136.4922173, 314270011.70398194, 313381214.78930664, 404612037.53597295, 289941187.03234696, 264975423.54746282, 253466659.98074394, 244349323.7312696], "w": 1.4, "w25": 2.8, "var": -1.4}, {"k": "101 - 200", "val26": 885745908.4194316, "m12": [135660557.40369394, 115584167.32068172, 119424972.00739767, 114482413.51210463, 121258598.06729053, 122953694.91328202, 109715991.2699811, 124107396.9173541, 123345405.77838485, 135644677.07802352, 133001960.5501608, 136976781.91224518], "w": 0.6, "w25": 0.7, "var": -0.1}, {"k": "301 - 400", "val26": 713087358.2902452, "m12": [102625259.2745485, 105360229.29045732, 94455653.25288117, 91961210.34453452, 95271162.46608733, 95347090.58543709, 82349069.43277961, 104364182.57161963, 82317220.8821803, 76435115.85359555, 110064653.0074686, 162210025.95716453], "w": 0.5, "w25": 0.7, "var": -0.2}, {"k": "501 - 600", "val26": 687309065.9897884, "m12": [66329660.64188893, 75426550.63417368, 74173332.02242598, 81225459.31713314, 85727311.05225676, 84932160.07519421, 80650331.54289429, 106550455.85514814, 101063856.8384105, 111668287.74205984, 106882482.0746206, 95561491.86146085], "w": 0.5, "w25": 0.3, "var": 0.1}, {"k": "201 - 300", "val26": 206918395.77471924, "m12": [13644250.99035646, 11319972.731445316, 11675222.350585938, 13226392.850952148, 15338677.740966797, 17181526.868652344, 16789425.760986328, 15974277.141479492, 27873330.078125, 46308934.31121826, 41298422.77319336, 41492478.84106445], "w": 0.1, "w25": 0.1, "var": 0.0}, {"k": "L.PROF 5000", "val26": 12345304.62423706, "m12": [0.0, 158991.640068054, 151307.83001708984, 4774.940010070801, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 248118.1961669922, 12097186.428070068], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "3001 - 4000", "val26": 4328827.029561996, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 698128.5395183563, 831228.0800476074, 1294523.680015564, 1504946.7299804688], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "801 - 900", "val26": 3388694.361207068, "m12": [2838141.7017765036, 2597939.463191987, 754230.0097160339, 335352.52055740356, 147482.9290046692, 77397.1300201416, 140754.25018310547, 739152.8200723529, 841606.5209565163, 660244.949999094, 601201.3299905062, 328337.35998535156], "w": 0.0, "w25": 0.6, "var": -0.6}, {"k": "L.PROF 7501-10000", "val26": 3126924.8369750977, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3126924.8369750977], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "901 - 1000", "val26": 124437.0, "m12": [44352.0, 15201.599609375, 29250.0, 16151.7001953125, 12675.0, 0.0, 23158.0, 75929.0, 25350.0, 0.0, 0.0, 0.0], "w": 0.0, "w25": 0.0, "var": -0.0}, {"k": "601 - 700", "val26": 0.0, "m12": [87347.35986328131, 13350.0, 0.0, 0.0, 40050.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "w": 0.0, "w25": 0.0, "var": -0.0}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [63143712065.5067, 54187885267.88121, 30429108375.11623, 2084995858.3210845, 885745908.4194316, 713087358.2902452, 687309065.9897884, 206918395.77471924, 12345304.62423706, 4328827.029561996, 3388694.361207068, 3126924.8369750977, 124437.0, 0.0], "ytd25_by": [46075005679.93342, 45609605119.60663, 17726720594.60483, 3241677824.5790668, 769605237.64888, 809143951.2156674, 387470880.224949, 115625577.16225219, 1034686.629499435, 0.0, 746162228.2623317, 0.0, 12588943.435791016, 3084302.556396485]}}, "mix": {"Fabricante": {"rows": [{"k": "UNILEVER", "val26": 103147028229.5481, "m12": [12253503120.641916, 12923064038.262846, 12992667081.8042, 12083341364.829174, 12187380461.415129, 13139634899.140722, 12189984143.041603, 16018786552.27334, 14591324691.45812, 15668665676.42055, 15812375419.002092, 15726256848.211662], "w": 67.7, "w25": 65.1, "var": 2.6}, {"k": "DREAMCO", "val26": 30980530433.316875, "m12": [3464848896.4152846, 3453900334.742139, 3697866294.1767874, 3689633332.664441, 4198327557.62943, 4209540025.1080127, 4046839095.38738, 4538531973.404184, 4220727405.8015037, 4109869787.2187223, 4696240475.039587, 5158781671.357491], "w": 20.3, "w25": 21.6, "var": -1.3}, {"k": "MARCAS PROPIAS", "val26": 8928178558.377327, "m12": [1262291491.926113, 1142378492.5853903, 1190752234.4719977, 1117353959.2794495, 1203124658.2188811, 1252198193.5428855, 1106300650.2034147, 1300802857.9678879, 1282803847.9275942, 1422748091.4120169, 1314190440.7565877, 1249134476.566937], "w": 5.9, "w25": 7.3, "var": -1.5}, {"k": "Otros", "val26": 5219597948.061508, "m12": [643025968.4543215, 612534145.7210073, 710035907.1232173, 762762737.731383, 770480554.443738, 702942447.1985989, 719070144.1555055, 776844926.566637, 647028244.6444147, 736529556.8337985, 792386134.6951064, 844796493.9674485], "w": 3.4, "w25": 3.3, "var": 0.1}, {"k": "ECOVITA", "val26": 4086741313.8475814, "m12": [587288317.5528506, 440223501.59516776, 450698527.83110255, 477772258.97713774, 424102144.31573784, 501259667.19827735, 482864245.4215982, 574169043.5211557, 573006616.1552191, 690180860.3465574, 606739382.6514627, 658521498.553311], "w": 2.7, "w25": 2.7, "var": 0.0}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [103147028229.5481, 30980530433.316875, 8928178558.377327, 5219597948.061508, 4086741313.8475814], "ytd25_by": [75176707445.83559, 24954391357.14346, 8446914324.223486, 3853945348.7893686, 3065766549.8678207]}, "Marca": {"rows": [{"k": "SKIP INT", "val26": 58027712038.64194, "m12": [6977110443.116977, 7228166771.686685, 6904103010.806112, 6673922609.903685, 6785454069.947481, 7245723700.248078, 6288836536.353186, 9448477222.055515, 8200168758.72287, 9060785853.8646, 8990659722.888153, 8793060244.50954], "w": 38.1, "w25": 33.6, "var": 4.5}, {"k": "ALA", "val26": 38719963423.888405, "m12": [4524047116.896902, 4833328404.932754, 5112654884.728403, 4578600966.572263, 4510973967.425752, 5041917962.109273, 5028832449.47048, 5789172280.125193, 5423340802.762517, 5771095207.728292, 5924754839.259987, 5740849882.432666], "w": 25.4, "w25": 27.1, "var": -1.6}, {"k": "ARIEL", "val26": 19023335891.474487, "m12": [2177804739.1933656, 2232846050.410516, 2415008549.1368055, 2353248615.2263303, 2595419600.408359, 2470896147.6810055, 2362391248.8691144, 2765918958.1852064, 2504196784.831422, 2499131193.865505, 3217257261.9303617, 3203544296.1118665], "w": 12.5, "w25": 13.2, "var": -0.7}, {"k": "MARCAS PROPIAS", "val26": 8928178558.377327, "m12": [1262291491.926113, 1142378492.5853903, 1190752234.4719977, 1117353959.2794495, 1203124658.2188811, 1252198193.5428855, 1106300650.2034147, 1300802857.9678879, 1282803847.9275942, 1422748091.4120169, 1314190440.7565877, 1249134476.566937], "w": 5.9, "w25": 7.3, "var": -1.5}, {"k": "ZORRO", "val26": 7149754208.383172, "m12": [788523433.8118978, 726408771.4147052, 781173669.0756265, 820907792.5628302, 981524094.2865198, 1057590993.2130408, 981953131.531137, 992372869.5121061, 998974077.4606268, 958570649.7919791, 914997566.6819816, 1245294920.1923032], "w": 4.7, "w25": 6.2, "var": -1.5}, {"k": "GRANBY", "val26": 6398641056.017906, "m12": [752083681.6280371, 861276179.6434062, 975510180.2774928, 830510275.362991, 890548042.0594759, 851818293.7833675, 872149117.9181312, 780998083.0926318, 967791392.972729, 836661322.1276388, 896922446.8539516, 1192300399.2694554], "w": 4.2, "w25": 4.4, "var": -0.2}, {"k": "ACE", "val26": 4163747249.5236206, "m12": [412345825.5943564, 418625753.30273974, 421684395.7685535, 440687767.7623038, 537482317.2243482, 591455740.779331, 620459398.2318672, 690395730.5923594, 617621233.4132369, 546174528.6266427, 475809875.4106243, 621830742.4695587], "w": 2.7, "w25": 1.5, "var": 1.2}, {"k": "ECOVITA", "val26": 4086741313.8475814, "m12": [587288317.5528506, 440223501.59516776, 450698527.83110255, 477772258.97713774, 424102144.31573784, 501259667.19827735, 482864245.4215982, 574169043.5211557, 573006616.1552191, 690180860.3465574, 606739382.6514627, 658521498.553311], "w": 2.7, "w25": 2.7, "var": 0.0}, {"k": "Otros", "val26": 5864002742.996927, "m12": [729462745.2699857, 688846587.3351823, 790434593.3112066, 837859407.8345934, 854786482.1363634, 792714533.6332334, 801271500.2105714, 866828308.6811475, 746987291.7406325, 842646264.4684057, 880600315.7117252, 932954528.5512111], "w": 3.8, "w25": 4.0, "var": -0.2}], "ytd26": 152362076483.15137, "ytd25": 115497725025.85968, "ytd26_by": [58027712038.64194, 38719963423.888405, 19023335891.474487, 8928178558.377327, 7149754208.383172, 6398641056.017906, 4163747249.5236206, 4086741313.8475814, 5864002742.996927], "ytd25_by": [38846243840.494675, 31256855599.69054, 15263438754.992601, 8446914324.223486, 7197767351.720088, 5060417137.458925, 1724473024.4966362, 3065766549.8678207, 4635848442.914909]}}, "unit": "MM"}, "volume": {"canal": {"rows": [{"k": "CARREFOUR", "val26": 17453.941769000005, "m12": [2292.2927479999994, 2354.9592439999988, 2251.455057000001, 2096.2515470000003, 2191.8452340000003, 2323.547153000001, 2112.229702, 2602.2147300000015, 2513.6172699999993, 2467.790602, 2689.4422169999975, 2745.1000950000016], "w": 32.1, "w25": 29.9, "var": 2.1}, {"k": "COTO", "val26": 9815.954734000004, "m12": [1507.9452459999995, 1349.2741259999991, 1537.7624779999994, 1367.3145840000007, 1341.2146760000003, 1338.8052010000004, 1264.7622150000002, 1560.5209979999997, 1388.0917800000004, 1520.4466599999996, 1314.9974800000002, 1428.3303999999994], "w": 18.0, "w25": 18.2, "var": -0.2}, {"k": "LA ANONIMA", "val26": 6807.662999999999, "m12": [975.6324999999995, 925.4438, 959.9513999999999, 890.7769999999997, 772.244, 1003.9594, 916.7265000000001, 990.5796000000001, 958.0732000000003, 895.9511000000001, 1022.5960000000001, 1019.7771999999998], "w": 12.5, "w25": 11.8, "var": 0.7}, {"k": "DIA", "val26": 6541.4198000000015, "m12": [777.2419999999998, 768.2323000000002, 873.2750000000003, 760.5122999999995, 709.9554000000002, 831.0449999999998, 697.2079999999997, 1225.7629000000004, 930.5088000000002, 965.8723999999997, 964.3011999999999, 926.7214999999999], "w": 12.0, "w25": 12.5, "var": -0.5}, {"k": "CENCOSUD", "val26": 5807.630877999999, "m12": [873.8625610000004, 1021.0966949999995, 863.1424739999998, 900.7995440000003, 935.5643730000003, 887.8310320000002, 735.6126600000001, 950.078126, 752.5311599999995, 850.3784600000001, 885.23922, 745.9602200000003], "w": 10.7, "w25": 11.6, "var": -1.0}, {"k": "GDN", "val26": 4860.3821979999975, "m12": [943.1516239999997, 911.7450390000001, 797.9201750000002, 744.4086999999998, 707.1301480000002, 702.14405, 596.8285689999998, 952.7582049999996, 622.7071199999996, 708.5518029999998, 648.620455, 628.7719960000002], "w": 8.9, "w25": 10.6, "var": -1.7}, {"k": "COOP. OBRERA", "val26": 3151.6957999999986, "m12": [441.18700000000007, 418.37119999999993, 453.01039999999995, 458.1612, 424.7294999999999, 482.31090000000006, 431.2383999999998, 417.0017999999999, 489.46619999999996, 454.65500000000003, 446.8936999999999, 430.1298], "w": 5.8, "w25": 5.4, "var": 0.4}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [17453.941769000005, 9815.954734000004, 6807.662999999999, 6541.4198000000015, 5807.630877999999, 4860.3821979999975, 3151.6957999999986], "ytd25_by": [16545.905380000004, 10057.394787000001, 6503.036899999997, 6897.469200000002, 6431.415402999997, 5866.816810999999, 2993.9539]}, "dims": {"Tier": {"rows": [{"k": "TIER 1", "val26": 24449.515218999986, "m12": [3554.007589, 3568.2532539999993, 3347.918814000003, 3224.916035000001, 3217.975641000001, 3379.936576000002, 2745.369476, 4131.300319000001, 3345.4590199999966, 3486.3447050000004, 3747.784252, 3613.320871000002], "w": 44.9, "w25": 41.3, "var": 3.6}, {"k": "TIER 2", "val26": 19045.40030000001, "m12": [2474.7357000000006, 2616.2412000000004, 2741.8281, 2449.065900000003, 2368.0601999999994, 2680.356700000001, 2595.0795000000026, 2972.319099999997, 2734.976900000003, 2719.8366, 2666.8110999999967, 2676.020400000002], "w": 35.0, "w25": 35.4, "var": -0.4}, {"k": "TIER 3", "val26": 10943.772660000013, "m12": [1782.5703899999992, 1564.6279499999994, 1646.7700700000005, 1544.24294, 1496.6474899999992, 1509.3494599999992, 1414.1570700000002, 1595.2969399999997, 1574.5596099999998, 1657.4647199999993, 1557.4949199999999, 1635.4499400000007], "w": 20.1, "w25": 23.3, "var": -3.2}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [24449.515218999986, 19045.40030000001, 10943.772660000013], "ytd25_by": [22851.116891000012, 19579.49691, 12865.37858000001]}, "Formato": {"rows": [{"k": "Doypack", "val26": 26017.33565699999, "m12": [3267.4368319999994, 3165.1421840000016, 3254.042281000001, 3137.8381750000012, 3345.0901640000016, 3464.563943000002, 3245.8828360000016, 4312.074076, 3624.630081999997, 3575.4205600000023, 3833.224419999999, 3961.5397400000024], "w": 47.8, "w25": 40.4, "var": 7.4}, {"k": "Botella", "val26": 24107.28552200002, "m12": [3820.7822469999987, 3816.314620000001, 3724.372003000001, 3400.4019000000017, 3075.768167000002, 3449.741192999999, 2926.7848099999987, 3732.2122829999994, 3428.601648, 3666.289664999998, 3545.6539520000024, 3358.0019709999997], "w": 44.3, "w25": 49.7, "var": -5.4}, {"k": "Bolsa", "val26": 4145.447800000003, "m12": [687.5089000000002, 731.9899000000001, 730.8536999999994, 654.5028000000003, 636.1750000000002, 627.9446, 560.0744000000001, 627.4380000000001, 580.7007999999995, 599.2485999999998, 570.5336999999998, 579.5076999999994], "w": 7.6, "w25": 9.3, "var": -1.7}, {"k": "Promopack", "val26": 164.02199999999993, "m12": [35.585699999999996, 35.6757, 27.249, 25.482000000000003, 25.65, 27.393000000000004, 21.864000000000004, 27.192000000000004, 21.063000000000006, 22.427999999999997, 21.369, 22.712999999999997], "w": 0.3, "w25": 0.6, "var": -0.3}, {"k": "Otros", "val26": 4.597200000000001, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2592, 1.3092, 3.0288], "w": 0.0, "w25": 0.0, "var": 0.0}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [26017.33565699999, 24107.28552200002, 4145.447800000003, 164.02199999999993, 4.597200000000001], "ytd25_by": [22358.959846, 27458.054724999987, 5158.285009999998, 320.6928, 0.0]}, "Tamaño": {"rows": [{"k": "401 - 500", "val26": 21977.548000000006, "m12": [3426.0964999999997, 3442.698500000001, 3316.056000000001, 3128.2605000000012, 2797.123, 3160.0729999999985, 2619.3799999999997, 3313.169999999999, 3133.919999999999, 3392.092999999999, 3249.2675000000004, 3109.6445], "w": 40.4, "w25": 44.8, "var": -4.4}, {"k": "2001 - 3000", "val26": 21430.447399999997, "m12": [2856.5952000000025, 2797.75604, 2837.413920000002, 2708.080379999998, 2883.3738000000035, 2859.017020000001, 2729.1754000000033, 3463.3379999999997, 2999.954620000002, 2954.6721199999993, 3204.8801400000016, 3219.410100000002], "w": 39.4, "w25": 35.9, "var": 3.5}, {"k": "701 - 800", "val26": 9187.122554000005, "m12": [1177.2519909999996, 1224.1966400000001, 1269.1018029999993, 1136.244640000001, 1152.5434890000004, 1299.9262130000002, 1168.7471899999991, 1549.648003, 1260.416720000001, 1276.0179449999991, 1279.5803119999994, 1352.7861710000006], "w": 16.9, "w25": 13.3, "var": 3.6}, {"k": "1001 - 2000", "val26": 902.8450399999999, "m12": [208.89380000000008, 156.94403999999997, 191.85482, 127.96913999999998, 127.48986, 127.74606, 128.85341999999997, 238.87666, 133.05380000000005, 95.44820000000001, 91.43140000000002, 87.4355], "w": 1.7, "w25": 3.8, "var": -2.1}, {"k": "101 - 200", "val26": 453.74846, "m12": [80.49699, 63.45669, 65.77761, 62.198679999999996, 64.17303, 65.37766, 57.61767, 68.38464, 62.808670000000006, 67.78596, 66.63182000000002, 65.14204], "w": 0.8, "w25": 0.8, "var": 0.0}, {"k": "301 - 400", "val26": 206.781955, "m12": [37.270433000000004, 39.881689, 33.78297099999999, 30.625005000000005, 31.565647000000006, 31.161582999999997, 27.100506000000003, 34.037306, 24.85616000000001, 20.355600000000003, 28.344, 40.926799999999986], "w": 0.4, "w25": 0.5, "var": -0.2}, {"k": "501 - 600", "val26": 136.4472, "m12": [14.600999999999999, 16.712400000000002, 15.796800000000001, 17.5662, 18.162, 17.357400000000002, 15.1782, 22.949399999999997, 20.3796, 22.390199999999997, 20.852999999999998, 17.339399999999998], "w": 0.3, "w25": 0.2, "var": 0.1}, {"k": "201 - 300", "val26": 135.183, "m12": [8.9775, 6.15, 6.276, 7.125, 8.182500000000001, 8.955, 8.487, 8.1855, 18.924, 34.236000000000004, 30.151500000000002, 26.244], "w": 0.2, "w25": 0.3, "var": -0.0}, {"k": "L.PROF 5000", "val26": 4.06, "m12": [0.0, 0.09, 0.115, 0.005, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.075, 3.9850000000000003], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "3001 - 4000", "val26": 2.176, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.348, 0.404, 0.656, 0.768], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "801 - 900", "val26": 1.3302, "m12": [1.1240999999999999, 1.2348, 0.34020000000000006, 0.1494, 0.0684, 0.028800000000000003, 0.06480000000000001, 0.3222, 0.3321, 0.243, 0.21960000000000002, 0.11970000000000001], "w": 0.0, "w25": 0.5, "var": -0.5}, {"k": "L.PROF 7501-10000", "val26": 0.99, "m12": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.99], "w": 0.0, "w25": 0.0, "var": 0.0}, {"k": "901 - 1000", "val26": 0.008369999999999999, "m12": [0.00279, 0.00093, 0.00186, 0.00093, 0.00093, 0.0, 0.00186, 0.0046500000000000005, 0.00186, 0.0, 0.0, 0.0], "w": 0.0, "w25": 0.0, "var": -0.0}, {"k": "601 - 700", "val26": 0.0, "m12": [0.0033750000000000004, 0.000675, 0.0, 0.0, 0.000675, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "w": 0.0, "w25": 0.0, "var": -0.0}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [21977.548000000006, 21430.447399999997, 9187.122554000005, 902.8450399999999, 453.74846, 206.781955, 136.4472, 135.183, 4.06, 2.176, 1.3302, 0.99, 0.008369999999999999, 0.0], "ytd25_by": [24748.381078999995, 19845.320780000016, 7329.89218099999, 2096.2653599999994, 448.63160000000005, 303.167581, 87.9462, 140.48399999999998, 0.565, 0.0, 294.54030000000006, 0.0, 0.7254, 0.0729]}}, "mix": {"Fabricante": {"rows": [{"k": "UNILEVER", "val26": 35939.02099999999, "m12": [5133.106700000003, 5332.662300000002, 5245.6357, 4762.219399999999, 4443.936200000003, 4935.771000000001, 4333.180900000001, 5892.009099999995, 5138.198799999995, 5259.184600000002, 5228.4544000000005, 5152.2221999999965], "w": 66.0, "w25": 62.6, "var": 3.4}, {"k": "DREAMCO", "val26": 10314.014600000011, "m12": [1252.0400999999993, 1273.5062000000014, 1316.2631999999994, 1299.2151999999994, 1549.645, 1516.0991999999994, 1390.8337999999992, 1545.3646000000003, 1386.6564000000008, 1296.5585999999998, 1538.7328000000011, 1639.7692000000009], "w": 18.9, "w25": 19.0, "var": -0.0}, {"k": "MARCAS PROPIAS", "val26": 4324.954699999998, "m12": [764.57089, 630.2276499999999, 606.9373700000002, 543.12054, 553.67579, 579.95296, 502.8698700000001, 670.69144, 629.5807799999999, 738.9032899999997, 654.4827600000001, 548.4735999999998], "w": 7.9, "w25": 11.7, "var": -3.7}, {"k": "Otros", "val26": 2109.725919, "m12": [321.92008900000013, 285.20095399999997, 342.40041399999996, 372.14613499999996, 333.81834100000003, 301.25427600000006, 310.62407599999995, 331.6030190000001, 259.01122, 283.1996049999999, 306.1470520000001, 317.8866710000001], "w": 3.9, "w25": 3.4, "var": 0.5}, {"k": "ECOVITA", "val26": 1750.9719600000003, "m12": [339.6758999999999, 227.52529999999993, 225.2802999999999, 241.5236, 201.60799999999995, 236.56529999999998, 217.09740000000002, 259.2482, 241.54832999999996, 285.79993, 244.27325999999996, 266.43954], "w": 3.2, "w25": 3.3, "var": -0.1}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [35939.02099999999, 10314.014600000011, 4324.954699999998, 2109.725919, 1750.9719600000003], "ytd25_by": [34615.496900000006, 10500.855710000003, 6466.239079999999, 1862.045090999999, 1851.3555999999996]}, "Marca": {"rows": [{"k": "SKIP INT", "val26": 18561.0449, "m12": [2818.386600000001, 2774.9695, 2539.4542, 2457.7081000000017, 2329.5238000000013, 2561.132900000002, 2004.0193999999997, 3257.2856000000006, 2588.3506999999995, 2755.167400000001, 2720.8238999999994, 2674.2649999999994], "w": 34.1, "w25": 30.3, "var": 3.8}, {"k": "ALA", "val26": 14881.617299999998, "m12": [1997.8065000000004, 2170.8838000000005, 2269.9539000000013, 1950.0207000000003, 1744.1217999999988, 2022.7066999999997, 1980.0969000000007, 2338.9492999999993, 2145.9961000000003, 2195.9965999999986, 2189.2744999999973, 2008.5972000000002], "w": 27.3, "w25": 28.2, "var": -0.8}, {"k": "ARIEL", "val26": 5886.499800000003, "m12": [734.8357000000003, 792.5962000000005, 807.7374000000004, 766.4316, 887.8451999999997, 818.2066, 740.8697999999999, 873.5680000000001, 756.8586000000004, 731.0439999999999, 1026.9228000000003, 939.0300000000002], "w": 10.8, "w25": 11.0, "var": -0.2}, {"k": "MARCAS PROPIAS", "val26": 4324.954699999998, "m12": [764.57089, 630.2276499999999, 606.9373700000002, 543.12054, 553.67579, 579.95296, 502.8698700000001, 670.69144, 629.5807799999999, 738.9032899999997, 654.4827600000001, 548.4735999999998], "w": 7.9, "w25": 11.7, "var": -3.7}, {"k": "ZORRO", "val26": 2578.9978000000006, "m12": [294.9735999999999, 269.83599999999996, 291.5995999999999, 319.008, 397.8091999999998, 418.58140000000003, 367.43739999999985, 363.39140000000003, 353.7083999999999, 327.91979999999984, 308.8606, 439.09879999999987], "w": 4.7, "w25": 5.8, "var": -1.1}, {"k": "GRANBY", "val26": 2496.076, "m12": [316.8146000000001, 386.69800000000026, 436.07759999999996, 354.37359999999984, 370.1376, 351.8594, 348.9986, 295.7202, 403.8430000000001, 307.9718, 318.34100000000007, 469.342], "w": 4.6, "w25": 4.1, "var": 0.4}, {"k": "ECOVITA", "val26": 1750.9719600000003, "m12": [339.6758999999999, 227.52529999999993, 225.2802999999999, 241.5236, 201.60799999999995, 236.56529999999998, 217.09740000000002, 259.2482, 241.54832999999996, 285.79993, 244.27325999999996, 266.43954], "w": 3.2, "w25": 3.3, "var": -0.1}, {"k": "ACE", "val26": 1584.7852, "m12": [181.95559999999998, 175.52139999999997, 180.27459999999996, 180.03719999999993, 226.12919999999994, 239.06860000000003, 247.54520000000005, 269.9783999999999, 235.27239999999998, 195.9202, 168.67600000000002, 228.32439999999994], "w": 2.9, "w25": 1.4, "var": 1.5}, {"k": "Otros", "val26": 2373.7405189999995, "m12": [362.294289, 320.86455400000006, 379.202014, 406.001535, 371.832741, 341.568876, 345.671476, 370.083819, 299.83722, 324.923005, 340.435452, 351.220671], "w": 4.4, "w25": 4.1, "var": 0.3}], "ytd26": 54438.688179, "ytd25": 55295.992381000004, "ytd26_by": [18561.0449, 14881.617299999998, 5886.499800000003, 4324.954699999998, 2578.9978000000006, 2496.076, 1750.9719600000003, 1584.7852, 2373.7405189999995], "ytd25_by": [16745.8585, 15574.45800000001, 6097.070999999998, 6466.239079999999, 3226.3457100000005, 2290.2152000000006, 1851.3555999999996, 778.6931999999997, 2265.756091]}}, "unit": "t"}, "focus": ["UNILEVER", "DREAMCO", "MARCAS PROPIAS", "ECOVITA"]};
+const DSC = {"UNILEVER": {"rows": [{"canal": "CARREFOUR", "ytd": 72.6, "var_ytd": 574, "m26": [71.7, 72.6, 74.4, 75.4, 71.6, 70.4], "var_l6m": -127, "jun": 70.4}, {"canal": "COTO", "ytd": 62.9, "var_ytd": 73, "m26": [57.9, 64.9, 62.5, 68.0, 63.3, 61.4], "var_l6m": 347, "jun": 61.4}, {"canal": "LA ANONIMA", "ytd": 71.8, "var_ytd": -145, "m26": [72.7, 73.2, 72.5, 72.1, 72.1, 71.0], "var_l6m": -173, "jun": 71.0}, {"canal": "CENCOSUD", "ytd": 67.5, "var_ytd": 543, "m26": [64.2, 65.9, 65.9, 70.5, 74.0, 63.0], "var_l6m": -113, "jun": 63.0}, {"canal": "DIA", "ytd": 60.4, "var_ytd": 386, "m26": [55.7, 64.7, 65.7, 56.8, 60.1, 63.3], "var_l6m": 758, "jun": 63.3}, {"canal": "GDN", "ytd": 66.3, "var_ytd": -65, "m26": [66.9, 74.8, 62.7, 60.5, 61.5, 66.4], "var_l6m": -51, "jun": 66.4}, {"canal": "COOP. OBRERA", "ytd": 65.9, "var_ytd": -143, "m26": [65.8, 61.9, 68.4, 71.0, 66.2, 65.1], "var_l6m": -73, "jun": 65.1}], "months": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "total": {"m26": [65.7, 69.0, 68.5, 69.2, 68.1, 66.5], "ytd": 67.7, "var_l6m": 80, "jun": 66.5}}, "DREAMCO": {"rows": [{"canal": "CARREFOUR", "ytd": 15.0, "var_ytd": -400, "m26": [14.2, 14.6, 13.2, 11.7, 17.1, 18.7], "var_l6m": 459, "jun": 18.7}, {"canal": "COTO", "ytd": 30.4, "var_ytd": -127, "m26": [35.1, 28.8, 30.6, 25.7, 29.9, 31.9], "var_l6m": -323, "jun": 31.9}, {"canal": "LA ANONIMA", "ytd": 13.5, "var_ytd": 133, "m26": [13.7, 12.6, 13.4, 12.1, 13.0, 13.9], "var_l6m": 19, "jun": 13.9}, {"canal": "CENCOSUD", "ytd": 25.6, "var_ytd": -608, "m26": [29.2, 28.3, 27.1, 23.1, 18.7, 28.0], "var_l6m": -124, "jun": 28.0}, {"canal": "DIA", "ytd": 17.6, "var_ytd": 1426, "m26": [20.0, 15.0, 14.3, 18.0, 20.1, 15.9], "var_l6m": -406, "jun": 15.9}, {"canal": "GDN", "ytd": 19.6, "var_ytd": -356, "m26": [20.4, 14.3, 22.6, 22.5, 22.9, 19.0], "var_l6m": -142, "jun": 19.0}, {"canal": "COOP. OBRERA", "ytd": 23.7, "var_ytd": -181, "m26": [21.8, 27.0, 22.4, 18.9, 23.5, 25.4], "var_l6m": 363, "jun": 25.4}], "months": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "total": {"m26": [21.8, 19.6, 19.8, 18.2, 20.2, 21.8], "ytd": 20.3, "var_l6m": 0, "jun": 21.8}}, "MARCAS PROPIAS": {"rows": [{"canal": "CARREFOUR", "ytd": 8.8, "var_ytd": -169, "m26": [9.5, 8.8, 9.7, 9.4, 7.9, 7.3], "var_l6m": -217, "jun": 7.3}, {"canal": "COTO", "ytd": 0.0, "var_ytd": 0, "m26": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "var_l6m": 0, "jun": 0.0}, {"canal": "LA ANONIMA", "ytd": 5.3, "var_ytd": 2, "m26": [4.2, 4.7, 5.4, 5.8, 5.6, 5.5], "var_l6m": 132, "jun": 5.5}, {"canal": "CENCOSUD", "ytd": 3.4, "var_ytd": 6, "m26": [3.7, 3.2, 3.8, 3.1, 3.6, 3.2], "var_l6m": -50, "jun": 3.2}, {"canal": "DIA", "ytd": 15.7, "var_ytd": -1507, "m26": [17.3, 14.8, 13.9, 17.9, 14.9, 14.4], "var_l6m": -298, "jun": 14.4}, {"canal": "GDN", "ytd": 3.2, "var_ytd": 176, "m26": [2.9, 2.2, 3.9, 4.6, 2.4, 2.8], "var_l6m": -18, "jun": 2.8}, {"canal": "COOP. OBRERA", "ytd": 3.1, "var_ytd": 268, "m26": [3.6, 3.4, 2.2, 2.9, 3.4, 3.1], "var_l6m": -50, "jun": 3.1}], "months": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "total": {"m26": [6.0, 5.6, 6.0, 6.3, 5.7, 5.3], "ytd": 5.9, "var_l6m": -68, "jun": 5.3}}, "ECOVITA": {"rows": [{"canal": "CARREFOUR", "ytd": 0.8, "var_ytd": 7, "m26": [0.7, 0.7, 0.8, 1.1, 0.9, 1.0], "var_l6m": 35, "jun": 1.0}, {"canal": "COTO", "ytd": 6.2, "var_ytd": 91, "m26": [6.5, 5.9, 6.5, 5.9, 6.5, 6.4], "var_l6m": -10, "jun": 6.4}, {"canal": "LA ANONIMA", "ytd": 1.6, "var_ytd": -17, "m26": [1.6, 1.3, 1.3, 1.7, 1.7, 1.6], "var_l6m": 1, "jun": 1.6}, {"canal": "CENCOSUD", "ytd": 1.4, "var_ytd": 5, "m26": [1.3, 1.3, 1.8, 1.9, 1.0, 1.4], "var_l6m": 6, "jun": 1.4}, {"canal": "DIA", "ytd": 3.1, "var_ytd": -219, "m26": [3.7, 2.9, 3.3, 4.0, 2.2, 2.5], "var_l6m": -122, "jun": 2.5}, {"canal": "GDN", "ytd": 5.8, "var_ytd": 143, "m26": [3.9, 4.6, 5.2, 7.2, 7.1, 7.1], "var_l6m": 325, "jun": 7.1}, {"canal": "COOP. OBRERA", "ytd": 0.0, "var_ytd": 0, "m26": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], "var_l6m": 0, "jun": 0.0}], "months": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "total": {"m26": [2.6, 2.5, 2.7, 3.1, 2.6, 2.8], "ytd": 2.7, "var_l6m": 18, "jun": 2.8}}};
+const DCC = {"lastm_name": "Jul", "maxy": 2026, "prevy": 2025, "l12_labels": ["Ago'25", "Sep'25", "Oct'25", "Nov'25", "Dic'25", "Ene'26", "Feb'26", "Mar'26", "Abr'26", "May'26", "Jun'26", "Jul'26"], "order": ["SKIP CICLO CORTO", "SKIP P/DILUIR", "SKIP LÍQUIDO REGULAR", "Otro"], "months": ["Feb", "Mar", "Abr", "May", "Jun", "Jul"], "mix": {"value": {"rows": [{"k": "SKIP CICLO CORTO", "val26": 7504570255.524423, "m12": [617126293.0921198, 786380977.6779002, 792225529.9857491, 692363105.1458166, 692670038.2313259, 818135009.1094816, 896888192.7140142, 1149853181.5898654, 1046961737.4658494, 1203908162.2980464, 1242509357.113231, 1146314615.2339344], "w": 12.9, "w25": 0.3, "var": 12.6}, {"k": "SKIP P/DILUIR", "val26": 23556356073.475235, "m12": [3456489207.326249, 3584413072.571797, 3150701175.2207675, 3122627245.1643267, 2835999869.854542, 3266761251.11069, 2446942997.2327404, 3675284907.7127967, 3240108584.119698, 3844503110.0989485, 3567485210.5742893, 3515270012.6260753], "w": 40.6, "w25": 53.7, "var": -13.1}, {"k": "SKIP LÍQUIDO REGULAR", "val26": 25075952681.245724, "m12": [2691845152.1979823, 2627068101.8150673, 2728556868.7140017, 2625812975.1159797, 3017436154.3344665, 2930353221.3361473, 2748084561.086957, 4342576337.930455, 3645169885.8069634, 3691711630.1022725, 3885886593.8713, 3832170451.1116285], "w": 43.2, "w25": 42.5, "var": 0.7}, {"k": "Otro", "val26": 1890833028.3965588, "m12": [211649790.50062445, 230304619.62192056, 232619436.88559327, 233119284.47756165, 239348007.52714482, 230474218.69175947, 196920785.31947526, 280762794.8223961, 267928551.33036053, 320662951.3653328, 294778561.32933253, 299305165.53790176], "w": 3.3, "w25": 3.5, "var": -0.2}], "ytd26": 58027712038.641945, "ytd25": 38846243840.49468, "ytd26_by": [7504570255.524423, 23556356073.475235, 25075952681.245724, 1890833028.3965588], "ytd25_by": [123233685.28138876, 20871161383.50709, 16497149606.574049, 1354699165.1321487], "unit": "MM"}, "volume": {"rows": [{"k": "SKIP CICLO CORTO", "val26": 1972.7560000000003, "m12": [177.616, 229.54199999999994, 231.586, 191.86599999999993, 176.03799999999998, 218.04599999999996, 240.45799999999994, 323.742, 271.27799999999996, 303.134, 318.29799999999994, 297.8], "w": 10.6, "w25": 0.2, "var": 10.4}, {"k": "SKIP P/DILUIR", "val26": 8424.801, "m12": [1636.9899000000003, 1602.4722000000002, 1317.9962999999998, 1331.46, 1122.1050000000002, 1346.9910000000002, 878.091, 1384.38, 1108.527, 1301.982, 1209.9810000000007, 1194.8490000000002], "w": 45.4, "w25": 60.8, "var": -15.4}, {"k": "SKIP LÍQUIDO REGULAR", "val26": 7728.636199999999, "m12": [948.2022, 882.3423999999999, 929.5095999999996, 873.8634000000001, 973.6508, 939.8859999999999, 842.1272000000002, 1480.2182, 1148.5536000000002, 1075.2752, 1127.3744, 1115.2015999999999], "w": 41.6, "w25": 36.7, "var": 5.0}, {"k": "Otro", "val26": 434.8517, "m12": [55.57850000000001, 60.61290000000001, 60.362300000000005, 60.518699999999974, 57.73, 56.2099, 43.34319999999999, 68.94539999999999, 59.99209999999999, 74.77619999999997, 65.17049999999999, 66.4144], "w": 2.3, "w25": 2.3, "var": 0.0}], "ytd26": 18561.0449, "ytd25": 16745.858500000002, "ytd26_by": [1972.7560000000003, 8424.801, 7728.636199999999, 434.8517], "ytd25_by": [36.129999999999995, 10179.7356, 6142.789200000002, 387.2036999999999], "unit": "t"}}, "by_canal": {"rows": [{"canal": "CARREFOUR", "ytd": 10.6, "var_ytd": 1009, "m26": [11.4, 10.3, 11.5, 11.4, 11.5, 9.8], "var_l6m": -167, "jun": 9.8}, {"canal": "COTO", "ytd": 12.9, "var_ytd": 1262, "m26": [13.7, 13.1, 13.2, 11.7, 12.9, 13.3], "var_l6m": -41, "jun": 13.3}, {"canal": "LA ANONIMA", "ytd": 18.2, "var_ytd": 1793, "m26": [16.5, 23.5, 16.1, 16.5, 22.9, 16.5], "var_l6m": -5, "jun": 16.5}, {"canal": "CENCOSUD", "ytd": 15.2, "var_ytd": 1507, "m26": [20.5, 13.5, 15.0, 16.7, 14.3, 16.5], "var_l6m": -392, "jun": 16.5}, {"canal": "DIA", "ytd": 12.2, "var_ytd": 1221, "m26": [13.9, 7.0, 12.9, 15.7, 11.4, 14.8], "var_l6m": 93, "jun": 14.8}, {"canal": "GDN", "ytd": 11.0, "var_ytd": 1064, "m26": [12.0, 8.1, 8.5, 12.3, 13.1, 13.4], "var_l6m": 143, "jun": 13.4}, {"canal": "COOP. OBRERA", "ytd": 14.1, "var_ytd": 1358, "m26": [16.2, 15.8, 12.8, 14.0, 12.6, 14.7], "var_l6m": -153, "jun": 14.7}], "total": {"m26": [14.3, 12.2, 12.8, 13.3, 13.8, 13.0], "ytd": 12.9, "var_ytd": 1262, "var_l6m": -123, "jun": 13.0}}};
+/* Paleta CATEGORICA para las barras de mix (sec. 1): hues bien diferenciados
+   pero sobrios/profesionales. Evita 3 azules seguidos (Skip/Ala/Ariel, Tiers, etc). */
+const PAL=['#0b1f8f','#e0731f','#12a594','#d1344b','#7c5cbf','#e0a400','#2f80ed','#0b8f6a','#c04a86','#63708c'];
+/* Color por FABRICANTE, asignado por posicion en el foco (0=Unilever siempre):
+   0 azul oscuro (Unilever) - 1 rojo (principal competidor) - 2 naranja - 3 gris - resto extra.
+   Se arma dinamicamente para que funcione en cualquier categoria. */
+const FABPAL=['#0b1f8f','#d1344b','#e0731f','#63708c','#7c5cbf','#0b8f6a','#2f80ed'];
+const COLM={};(D0.focus||[]).forEach((m,i)=>{COLM[m]=FABPAL[i]||FABPAL[FABPAL.length-1];});
+function colFab(m){return COLM[m]||'#1f36c7';}
+
+/* ===== KPIs ===== */
+(function(){
+ const fmt=(n,d=1)=>n==null?'\u2014':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'\u2014':Math.round(n).toLocaleString('es-AR');
+ const s=D0.summary, ul=D0.manuf_value[0], comp=D0.top_comp_manuf;
+ const kc=[
+  {lab:'Mercado \u00b7 Volumen YTD',val:(s.vol_ytd_var>0?'+':'')+fmt(s.vol_ytd_var,1)+'%',delta:'YTD'+String(D0.prevy).slice(2)+' \u2192 YTD'+String(D0.maxy).slice(2),col:s.vol_ytd_var<0?'var(--neg)':'var(--pos)'},
+  {lab:'Mercado \u00b7 Valor YTD',val:'+'+fmt(s.val_ytd_var,1)+'%',delta:'Inflaci\u00f3n de precios',col:'var(--ul2)'},
+  {lab:'Unilever \u00b7 Share Valor',val:fmt(ul.ytd26,1)+'%',delta:'YTD \u00b7 '+(ul.ytd_var>0?'+':'')+fmt0(ul.ytd_var)+' bps vs '+D0.prevy,col:ul.ytd_var<0?'var(--neg)':'var(--pos)'},
+  {lab:comp.manuf+' \u00b7 Share Valor',val:fmt(comp.ytd26,1)+'%',delta:'YTD \u00b7 '+(comp.ytd_var>0?'+':'')+fmt0(comp.ytd_var)+' bps vs '+D0.prevy,col:comp.ytd_var>0?'var(--pos)':'var(--neg)'},
+ ];
+ document.getElementById('kpicards').innerHTML=kc.map(k=>`<div class="kpi"><div class="stripe" style="background:${k.col}"></div><div class="lab">${k.lab}</div><div class="val" style="color:${k.col}">${k.val}</div><div class="delta mut">${k.delta}</div></div>`).join('');
+})();
+
+/* ===== 1 · MERCADO ===== */
+(function(){
+ const tip=document.getElementById('tip')||{style:{}};
+ let curMetric='value';
+ function fmtM(n){return curMetric==='value'
+   ?(n/1e9).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' MM'
+   :(n/1000).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' t';}
+ function varPill(v){const c=v>0?'pos posbg':(v<0?'neg negbg':'');const s=v>0?'+':'';return `<div class="varpill ${c}">${s}${v.toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})}pp</div>`;}
+ function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}
+ function hideTip(){tip.style.opacity=0;}
+ function pesoBars(rows,el,grad){
+  const max=Math.max(...rows.map(r=>r.w));
+  el.innerHTML=rows.map(r=>`<div class="wrow"><div class="nm" title="${r.k}">${r.k}</div>
+    <div class="bartrack"><div class="barfill" style="width:${r.w/max*100}%;background:${grad}"></div></div>
+    <div class="wval">${r.w.toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})}%</div>
+    ${varPill(r.var)}</div>`).join('')+
+   `<div class="wrow trow"><div class="nm">TOTAL</div><div></div><div class="wval">100,0%</div><div class="varpill">\u2014</div></div>`;
+ }
+ let curDim='Tier';
+ function renderCanal(){pesoBars(D1[curMetric].canal.rows,document.getElementById('canalBars'),'linear-gradient(90deg,#0b8f6a,#1abf8a)');}
+ function renderDim(){
+  const dd=D1[curMetric].dims[curDim];
+  document.getElementById('dimLabel').textContent=curDim;
+  document.getElementById('dimLabel2').textContent=curDim;
+  pesoBars(dd.rows,document.getElementById('dimBars'),'linear-gradient(90deg,#1f36c7,#3b57e6)');
+  renderStrip(dd);
+ }
+ function renderStrip(dd){
+  const keys=dd.rows.map(r=>r.k);
+  const colOf={};keys.forEach((k,i)=>colOf[k]=PAL[i%PAL.length]);
+  const cols=[];
+  cols.push({lab:"YTD'25",vals:keys.map((k,i)=>dd.ytd25_by[i])});
+  cols.push({lab:"YTD'26",vals:dd.rows.map(r=>r.val26)});
+  cols.push({gap:true});
+  D1.l12_labels.forEach((lab,j)=>cols.push({lab:lab,month:j}));
+  cols.forEach(c=>{if(c.month!=null){c.vals=dd.rows.map(r=>r.m12[c.month]);}});
+  const totals=cols.map(c=>c.gap?0:c.vals.reduce((a,b)=>a+b,0));
+  const W=1340,H=340,padB=42,padT=14,padL=8;
+  const n=cols.length;const cw=(W-padL)/n;const bw=cw*0.66;const fullH=H-padB-padT;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block"><line x1="0" y1="${H-padB}" x2="${W}" y2="${H-padB}" stroke="#e4e8f2"/>`;
+  cols.forEach((c,ci)=>{
+   const x=padL+ci*cw+(cw-bw)/2;const cx=padL+ci*cw+cw/2;
+   if(c.gap)return;const tot=totals[ci];if(!tot)return;
+   let y=H-padB;
+   keys.forEach((k,ki)=>{const v=c.vals[ki];if(!v)return;const frac=v/tot;const h=frac*fullH;y-=h;const pct=(100*frac).toFixed(0);
+    svg+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${colOf[k]}" data-tip="${k} \u00b7 ${c.lab}: ${pct}% \u00b7 ${fmtM(v)}"/>`;
+    if(h>13)svg+=`<text x="${x+bw/2}" y="${y+h/2+3}" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="700" pointer-events="none">${pct}%</text>`;});
+   const isYTD=ci<2;
+   svg+=`<text x="${cx}" y="${H-padB+15}" text-anchor="middle" font-size="10" fill="${isYTD?'#0b1f8f':'#63708c'}" font-weight="${isYTD?700:600}">${c.lab}</text>`;
+  });
+  const sepx=padL+2*cw+(cw*0.15);
+  svg+=`<line x1="${sepx}" y1="${padT-6}" x2="${sepx}" y2="${H-padB}" stroke="#c9d2e8" stroke-dasharray="4 4"/></svg>`;
+  document.getElementById('strip').innerHTML=svg;
+  document.getElementById('legendMix').innerHTML=keys.map(k=>`<span><span class="sw" style="background:${colOf[k]}"></span>${k}</span>`).join('');
+  document.querySelectorAll('#strip rect').forEach(rc=>{rc.addEventListener('mousemove',e=>showTip(e,rc.getAttribute('data-tip')));rc.addEventListener('mouseleave',hideTip);});
+ }
+ function updTexts(){
+  const isV=curMetric==='value';
+  document.querySelectorAll('.metWord').forEach(e=>e.textContent=isV?'Valor':'Volumen');
+  document.querySelectorAll('.metLow').forEach(e=>e.textContent=isV?'valor':'volumen');
+  document.getElementById('mktNote').textContent=(isV?'Valor':'Volumen')+' · YTD '+D1.lastm_name+"'"+String(D1.maxy).slice(2);
+ }
+ function renderAll(){updTexts();renderCanal();renderDim();}
+ document.querySelectorAll('#segTop button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#segTop button').forEach(x=>x.classList.remove('on'));b.classList.add('on');curDim=b.dataset.d;renderDim();}));
+ document.querySelectorAll('#segMetric button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('#segMetric button').forEach(x=>x.classList.remove('on'));b.classList.add('on');curMetric=b.dataset.m;renderAll();}));
+ renderAll();
+})();
+
+/* ===== 2 · FABRICANTES Y MARCAS (filtro por cliente: sumar cadenas y luego %) ===== */
+(function(){
+ const fmt=(n,d=1)=>n==null?'—':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'—':Math.round(n).toLocaleString('es-AR');
+ function bpsPill(v){if(v==null)return '<span class="mut">—</span>';const s=v>0?'+':'';const bg=v>0?'var(--posbg)':(v<0?'var(--negbg)':'#eef1f8');const col=v>0?'var(--pos)':(v<0?'var(--neg)':'var(--mut)');return `<span class="pill" style="background:${bg};color:${col}">${s}${fmt0(v)}</span>`;}
+ function heat(v){if(v==null||v===0)return '';const a=Math.min(Math.abs(v)/700,1)*0.45+0.1;return v>0?`background:rgba(26,143,90,${a})`:`background:rgba(209,52,75,${a})`;}
+ const S2=D0.sec2, F=S2.formats, CAD=S2.cadenas;
+ const sh=(a,b)=>b?100*a/b:0, bpsv=(a,b)=>Math.round((a-b)*100);
+ function aggS2(cadenas){
+  let mkt={v26:0,v25:0,vj:0,vm:0}, mktF={}; F.forEach(f=>mktF[f]={v26:0,v25:0});
+  const man={}; S2.focus.forEach(m=>{man[m]={v26:0,v25:0,vj:0,vm:0,fmt:{},brands:{}};F.forEach(f=>man[m].fmt[f]={v26:0,v25:0});});
+  cadenas.forEach(c=>{const bc=S2.by_canal[c];if(!bc)return;
+   mkt.v26+=bc.market.v26;mkt.v25+=bc.market.v25;mkt.vj+=bc.market.vj;mkt.vm+=bc.market.vm;
+   F.forEach(f=>{mktF[f].v26+=bc.market_fmt[f].v26;mktF[f].v25+=bc.market_fmt[f].v25;});
+   bc.manuf.forEach(m=>{const M=man[m.manuf];M.v26+=m.v26;M.v25+=m.v25;M.vj+=m.vj;M.vm+=m.vm;
+    F.forEach(f=>{M.fmt[f].v26+=m.fmt[f].v26;M.fmt[f].v25+=m.fmt[f].v25;});
+    m.brands.forEach(b=>{if(!M.brands[b.k]){M.brands[b.k]={v26:0,v25:0,vj:0,vm:0,fmt:{}};F.forEach(f=>M.brands[b.k].fmt[f]={v26:0,v25:0});}
+     const B=M.brands[b.k];B.v26+=b.v26;B.v25+=b.v25;B.vj+=b.vj;B.vm+=b.vm;
+     F.forEach(f=>{B.fmt[f].v26+=b.fmt[f].v26;B.fmt[f].v25+=b.fmt[f].v25;});});});});
+  return S2.focus.map(mn=>{const M=man[mn];
+   const brands=Object.keys(M.brands).map(k=>{const B=M.brands[k];
+    return {k,ytd25:sh(B.v25,mkt.v25),ytd26:sh(B.v26,mkt.v26),ytd_var:bpsv(sh(B.v26,mkt.v26),sh(B.v25,mkt.v25)),
+     may:sh(B.vm,mkt.vm),jun:sh(B.vj,mkt.vj),mom_var:bpsv(sh(B.vj,mkt.vj),sh(B.vm,mkt.vm)),
+     fmt:Object.fromEntries(F.map(f=>[f,bpsv(sh(B.fmt[f].v26,mktF[f].v26),sh(B.fmt[f].v25,mktF[f].v25))]))};
+   }).sort((a,b)=>b.ytd26-a.ytd26);
+   return {manuf:mn,ytd25:sh(M.v25,mkt.v25),ytd26:sh(M.v26,mkt.v26),ytd_var:bpsv(sh(M.v26,mkt.v26),sh(M.v25,mkt.v25)),
+    may:sh(M.vm,mkt.vm),jun:sh(M.vj,mkt.vj),mom_var:bpsv(sh(M.vj,mkt.vj),sh(M.vm,mkt.vm)),
+    fmt:Object.fromEntries(F.map(f=>[f,bpsv(sh(M.fmt[f].v26,mktF[f].v26),sh(M.fmt[f].v25,mktF[f].v25))])),brands};});
+ }
+ function renderS2(){
+  const cadenas=(mode==='total'||sel.size===0)?CAD:[...sel];
+  const MV=aggS2(cadenas);
+  const _yy=String(D0.maxy).slice(2);
+  let h=`<table><thead><tr><th class="l">Fabricante / Marca</th><th>YTD25</th><th>YTD26</th><th>Var YTD</th><th>${D0.prevm_name}${_yy}</th><th>${D0.lastm_name}${_yy}</th><th>Var MoM</th></tr></thead><tbody>`;
+  MV.forEach(m=>{h+=`<tr class="tot"><td class="l">${m.manuf}</td><td>${fmt(m.ytd25)}</td><td>${fmt(m.ytd26)}</td><td>${bpsPill(m.ytd_var)}</td><td>${fmt(m.may)}</td><td>${fmt(m.jun)}</td><td>${bpsPill(m.mom_var)}</td></tr>`;
+   m.brands.forEach(b=>{h+=`<tr class="brandrow"><td class="l mut" style="padding-left:18px">${b.k}</td><td>${fmt(b.ytd25,2)}</td><td>${fmt(b.ytd26,2)}</td><td>${bpsPill(b.ytd_var)}</td><td>${fmt(b.may,2)}</td><td>${fmt(b.jun,2)}</td><td>${bpsPill(b.mom_var)}</td></tr>`;});});
+  h+='</tbody></table>';document.getElementById('s2_val').innerHTML=h;
+  let g='<table><thead><tr><th class="l">Fabricante / Marca</th>';F.forEach(f=>g+=`<th>${f}</th>`);g+='</tr></thead><tbody>';
+  MV.forEach(m=>{g+=`<tr class="tot"><td class="l">${m.manuf}</td>`;F.forEach(f=>{const v=m.fmt[f];g+=`<td style="${heat(v)}">${bpsPill(v)}</td>`;});g+='</tr>';
+   m.brands.forEach(b=>{g+=`<tr class="brandrow"><td class="l mut" style="padding-left:18px">${b.k}</td>`;F.forEach(f=>{const v=b.fmt[f];g+=`<td style="${heat(v)}">${bpsPill(v)}</td>`;});g+='</tr>';});});
+  g+='</tbody></table>';document.getElementById('s2_fmt').innerHTML=g;
+ }
+ let mode='total',sel=new Set();
+ window.s2Mode=function(m){mode=m;
+  document.getElementById('s2Total').classList.toggle('on',m==='total');
+  document.getElementById('s2Cli').classList.toggle('on',m==='cliente');
+  document.getElementById('s2Zone').style.display=m==='cliente'?'flex':'none';
+  if(m==='total')sel.clear();chips();upd();};
+ function chips(){document.getElementById('s2Chips').innerHTML=CAD.map(c=>`<span class="fchip ${sel.has(c)?'on':''}" onclick="s2Chip('${c}')">${c}</span>`).join('');}
+ window.s2Chip=function(c){sel.has(c)?sel.delete(c):sel.add(c);chips();upd();};
+ function upd(){const mini=document.getElementById('s2Mini'),selm=document.getElementById('s2Sel');
+  if(mode==='total'){mini.innerHTML='Mostrando el <b>total del mercado</b> ('+CAD.length+' cadenas del cluster).';selm.textContent='';}
+  else{mini.innerHTML='Elegí <b>una o varias</b> cadenas (se suman y luego se calcula el %).';selm.innerHTML=sel.size===0?'(ninguna: se muestra el total)':'Selección: <b>'+[...sel].join(' + ')+'</b>';}
+  renderS2();}
+ var _n=document.getElementById('s2Notice'); if(_n) _n.style.display='none';
+ chips();renderS2();
+})();
+
+/* ===== SHARES POR CADENA ===== */
+(function(){
+ const FABS=Object.keys(DSC);
+ const MESES=D0.months_l6;
+ const fmt=(n,d=1)=>n==null?'\u2014':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'\u2014':Math.round(n).toLocaleString('es-AR');
+ function bpsPill(v){if(v==null)return '<span class="mut">\u2014</span>';const s=v>0?'+':'';const bg=v>0?'var(--posbg)':(v<0?'var(--negbg)':'#eef1f8');const col=v>0?'var(--pos)':(v<0?'var(--neg)':'var(--mut)');return `<span class="pill" style="background:${bg};color:${col}">${s}${fmt0(v)}</span>`;}
+ function spark(vals,w=160,h=42){const v=vals.filter(x=>x!=null);if(v.length<2)return '';const up=vals[vals.length-1]>=vals[0];const col=up?'#1a8f5a':'#d1344b';const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=vals.map((x,i)=>{const px=8+i/(vals.length-1)*(w-16);const py=h-6-((x-mn)/rg)*(h-14);return px.toFixed(1)+','+py.toFixed(1);}).join(' ');
+  const dots=vals.map((x,i)=>{const px=8+i/(vals.length-1)*(w-16);const py=h-6-((x-mn)/rg)*(h-14);return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="2.1" fill="${col}"/>`;}).join('');
+  return `<svg width="${w}" height="${h}" style="display:block;margin:auto"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;}
+ let fab="UNILEVER";
+ function chips(){document.getElementById('scChips').innerHTML=FABS.map(f=>{const on=f===fab;const c=colFab(f);return `<span class="fchip ${on?'on':''}" onclick="scFab('${f}')" style="${on?('background:'+c+';border-color:'+c+';color:#fff'):('color:'+c+';border-color:'+c)}"><span class="dot" style="background:${on?'#fff':c}"></span>${f}</span>`;}).join('');}
+ window.scFab=function(f){fab=f;document.getElementById('scTitle').textContent='Share de '+f+' por cadena';document.getElementById('scMini').innerHTML='Mostrando <b>'+f+'</b> \u00b7 la tabla se recalcula con datos reales.';render();chips();};
+ function render(){const D=DSC[fab];
+  let h=`<table><thead><tr><th class="l" rowspan="2">Cadena</th><th rowspan="2">Share<br>YTD</th><th rowspan="2">Var YTD</th><th class="grp" colspan="7">Tendencia ${fab} L6M</th><th rowspan="2">Var L6M</th><th rowspan="2">Share Mes<br>actual (${D0.lastm_name})</th></tr><tr>`;
+  MESES.forEach(m=>h+=`<th class="grp" style="border-left:none;border-right:none">${m}</th>`);
+  h+=`<th class="grp" style="border-left:none">Gr\u00e1fico</th></tr></thead><tbody>`;
+  D.rows.forEach(r=>{h+=`<tr><td class="cadena">${r.canal}</td><td class="big">${fmt(r.ytd,1)}%</td><td>${bpsPill(r.var_ytd)}</td>`;
+   r.m26.forEach((x,i)=>{h+=`<td class="mcell ${i===0?'grpL':''} grp">${x==null?'\u2014':fmt(x,1)+'%'}</td>`;});
+   h+=`<td class="grp grpR spark-td">${spark(r.m26)}</td><td>${bpsPill(r.var_l6m)}</td><td class="b">${fmt(r.jun,1)}%</td></tr>`;});
+  const t=D.total;
+  h+=`<tr class="tot"><td class="cadena">TOTAL</td><td class="big">${fmt(t.ytd,1)}%</td><td><span class="mut">\u2014</span></td>`;
+  t.m26.forEach((x,i)=>{h+=`<td class="mcell ${i===0?'grpL':''} grp">${x==null?'\u2014':fmt(x,1)+'%'}</td>`;});
+  h+=`<td class="grp grpR spark-td">${spark(t.m26)}</td><td>${bpsPill(t.var_l6m)}</td><td class="b">${fmt(t.jun,1)}%</td></tr>`;
+  h+='</tbody></table>';document.getElementById('scTabla').innerHTML=h;}
+ chips();scFab("UNILEVER");
+})();
+
+/* ===== 7 · LEADERS & BLEEDERS ===== */
+(function(){
+ const D={leaders:D0.brand_bandera.leaders,bleeders:D0.brand_bandera.bleeders,maxy:D0.maxy};
+ const fmt=(n,d=2)=>n==null?'\u2014':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'\u2014':Math.round(n).toLocaleString('es-AR');
+ function bpsPill(v){if(v==null)return '<span class="mut">\u2014</span>';const c=v>0?'pos':(v<0?'neg':'mut');const s=v>0?'+':'';const bg=v>0?'var(--posbg)':(v<0?'var(--negbg)':'#eef1f8');return `<span class="pill ${c}" style="background:${bg}">${s}${fmt0(v)}</span>`;}
+ /* Orden de fabricantes segun el foco (Unilever primero), luego el resto que aparezca */
+ const _all=[...new Set([...D.leaders,...D.bleeders].map(r=>r.manuf))];
+ const MANUFS=[...(D0.focus||[]).filter(m=>_all.includes(m)),..._all.filter(m=>!(D0.focus||[]).includes(m))];
+ /* Filtro congruente con la Seccion 3 (clientes): en "Por fabricante" NO hay nada
+    seleccionado por default; se aprieta para INCLUIR. Si no hay ninguno, se muestra todo. */
+ let mode='total', sel=new Set();
+ window.r7Mode=function(m){mode=m;
+  document.getElementById('r7Total').classList.toggle('on',m==='total');
+  document.getElementById('r7Fab').classList.toggle('on',m==='fabricante');
+  document.getElementById('r7Zone').style.display=m==='fabricante'?'flex':'none';
+  if(m==='total')sel.clear();
+  chips();upd();};
+ function chips(){document.getElementById('r7Chips').innerHTML=
+   MANUFS.map(m=>{const on=sel.has(m);const c=colFab(m);return `<span class="fchip ${on?'on':''}" onclick="r7Chip('${m}')" style="${on?('background:'+c+';border-color:'+c+';color:#fff'):('color:'+c+';border-color:'+c)}"><span class="dot" style="background:${on?'#fff':c}"></span>${m}</span>`;}).join('');}
+ window.r7Chip=function(m){if(sel.has(m))sel.delete(m);else sel.add(m);chips();upd();};
+ function tbl(rows,elId){const active=(mode==='total'||sel.size===0)?MANUFS:[...sel];
+  const f=rows.filter(r=>active.includes(r.manuf));
+  if(!f.length){document.getElementById(elId).innerHTML='<div class="mut" style="padding:20px;text-align:center">Sin datos.</div>';return;}
+  let h=`<table><thead><tr><th class="l">Marca</th><th class="l">Cadena</th><th class="l">Fab.</th><th>Sh${String(D.maxy).slice(2)}</th><th>Var</th></tr></thead><tbody>`;
+  f.forEach(r=>{const c=colFab(r.manuf);h+=`<tr><td class="l b">${r.brand}</td><td class="l small">${r.bandera}</td><td class="l small" style="color:${c};font-weight:700">${r.manuf}</td><td>${fmt(r.y26,2)}</td><td>${bpsPill(r.var)}</td></tr>`;});
+  h+='</tbody></table>';document.getElementById(elId).innerHTML=h;}
+ function upd(){const mini=document.getElementById('r7Mini'),selm=document.getElementById('r7Sel');
+  if(mode==='total'){mini.innerHTML='Mostrando <b>todos los fabricantes</b>.';if(selm)selm.textContent='';}
+  else{mini.innerHTML='Eleg\u00ed <b>uno o varios</b> fabricantes (apret\u00e1 para agregar).';if(selm)selm.innerHTML=sel.size===0?'(ninguno: se muestran todos)':'Selecci\u00f3n: <b>'+[...sel].join(' + ')+'</b>';}
+  tbl(D.leaders,'rank_ld');tbl(D.bleeders,'rank_bl');}
+ chips();upd();
+})();
+
+/* ===== Helper reutilizable: tira de mix 100% apilada (secciones 2.1 y 5.1) ===== */
+function mixStrip(opts){
+ const dd=opts.dd, keys=dd.rows.map(r=>r.k);
+ const colOf={}; keys.forEach((k,i)=>colOf[k]=opts.colorFn?opts.colorFn(k,i):PAL[i%PAL.length]);
+ const magfmt=(v)=> opts.unit==='t'
+   ?(v/1000).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' t'
+   :(v/1e9).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' MM';
+ const cols=[];
+ cols.push({lab:"YTD'25",vals:keys.map((k,i)=>dd.ytd25_by[i])});
+ cols.push({lab:"YTD'26",vals:dd.rows.map(r=>r.val26)});
+ cols.push({gap:true});
+ opts.l12.forEach((lab,j)=>cols.push({lab:lab,month:j}));
+ cols.forEach(c=>{if(c.month!=null){c.vals=dd.rows.map(r=>r.m12[c.month]);}});
+ const totals=cols.map(c=>c.gap?0:c.vals.reduce((a,b)=>a+b,0));
+ const W=1340,H=340,padB=42,padT=14,padL=8;
+ const n=cols.length;const cw=(W-padL)/n;const bw=cw*0.66;const fullH=H-padB-padT;
+ let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block"><line x1="0" y1="${H-padB}" x2="${W}" y2="${H-padB}" stroke="#e4e8f2"/>`;
+ cols.forEach((c,ci)=>{
+  const x=padL+ci*cw+(cw-bw)/2;const cx=padL+ci*cw+cw/2;
+  if(c.gap)return;const tot=totals[ci];if(!tot)return;
+  let y=H-padB;
+  keys.forEach((k,ki)=>{const v=c.vals[ki];if(!v)return;const frac=v/tot;const h=frac*fullH;y-=h;const pct=(100*frac).toFixed(0);
+   svg+=`<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${colOf[k]}" data-tip="${k} \u00b7 ${c.lab}: ${pct}% \u00b7 ${magfmt(v)}"/>`;
+   if(h>13)svg+=`<text x="${x+bw/2}" y="${y+h/2+3}" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="700" pointer-events="none">${pct}%</text>`;});
+  const isYTD=ci<2;
+  svg+=`<text x="${cx}" y="${H-padB+15}" text-anchor="middle" font-size="10" fill="${isYTD?'#0b1f8f':'#63708c'}" font-weight="${isYTD?700:600}">${c.lab}</text>`;
+ });
+ const sepx=padL+2*cw+(cw*0.15);
+ svg+=`<line x1="${sepx}" y1="${padT-6}" x2="${sepx}" y2="${H-padB}" stroke="#c9d2e8" stroke-dasharray="4 4"/></svg>`;
+ opts.container.innerHTML=svg;
+ opts.legend.innerHTML=keys.map(k=>`<span><span class="sw" style="background:${colOf[k]}"></span>${k}</span>`).join('');
+ opts.container.querySelectorAll('rect').forEach(rc=>{
+  rc.addEventListener('mousemove',e=>{const t=document.getElementById('tip');if(!t)return;t.innerHTML=rc.getAttribute('data-tip');t.style.opacity=1;t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY+14)+'px';});
+  rc.addEventListener('mouseleave',()=>{const t=document.getElementById('tip');if(t)t.style.opacity=0;});});
+}
+
+/* ===== 2.1 · Evolución del mix (Fabricante/Marca × Valor/Volumen) ===== */
+(function(){
+ let met='value', dim='Fabricante';
+ function colFn(k,i){if(dim==='Fabricante')return k==='Otros'?'#aab4c8':colFab(k);return PAL[i%PAL.length];}
+ function render(){
+  const mb=D1[met].mix[dim];
+  document.getElementById('dimLabel21').textContent=dim;
+  document.querySelectorAll('.metWord21').forEach(e=>e.textContent=met==='value'?'Valor':'Volumen');
+  document.querySelectorAll('.metLow21').forEach(e=>e.textContent=met==='value'?'valor':'volumen');
+  mixStrip({dd:mb,l12:D1.l12_labels,container:document.getElementById('strip21'),legend:document.getElementById('legendMix21'),colorFn:colFn,unit:D1[met].unit});
+ }
+ document.querySelectorAll('#segMetric21 button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#segMetric21 button').forEach(x=>x.classList.remove('on'));b.classList.add('on');met=b.dataset.m;render();}));
+ document.querySelectorAll('#segDim21 button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#segDim21 button').forEach(x=>x.classList.remove('on'));b.classList.add('on');dim=b.dataset.d;render();}));
+ render();
+})();
+
+/* ===== 5 · ESTRATEGIA DEL CANAL · CICLO CORTO (SKIP CC) ===== */
+(function(){
+ if(typeof DCC==='undefined' || !DCC){const s=document.getElementById('ciclocorto');if(s)s.style.display='none';const n=document.querySelector('nav.sticky a[href="#ciclocorto"]');if(n)n.style.display='none';return;}
+ /* 5.1 mix dentro de SKIP */
+ const SKPAL={'Concentrado':'#0b1f8f','Diluido (Ciclo Corto)':'#e0731f','Otro':'#63708c'};
+ let met='value';
+ function colFn(k,i){return SKPAL[k]||PAL[i%PAL.length];}
+ function renderMix(){
+  const mb=DCC.mix[met];
+  document.querySelectorAll('.metLowCC').forEach(e=>e.textContent=met==='value'?'valor':'volumen');
+  document.querySelectorAll('.metWordCC').forEach(e=>e.textContent=met==='value'?'Valor':'Volumen');
+  mixStrip({dd:mb,l12:DCC.l12_labels,container:document.getElementById('stripCC'),legend:document.getElementById('legendMixCC'),colorFn:colFn,unit:mb.unit});
+ }
+ document.querySelectorAll('#segMetricCC button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#segMetricCC button').forEach(x=>x.classList.remove('on'));b.classList.add('on');met=b.dataset.m;renderMix();}));
+ renderMix();
+ /* 5.2 tabla Skip CC dentro de SKIP, por cadena (mismo formato que Shares por Cadena) */
+ const MESES=D0.months_l6;
+ const fmt=(n,d=1)=>n==null?'\u2014':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'\u2014':Math.round(n).toLocaleString('es-AR');
+ function bpsPill(v){if(v==null)return '<span class="mut">\u2014</span>';const s=v>0?'+':'';const bg=v>0?'var(--posbg)':(v<0?'var(--negbg)':'#eef1f8');const col=v>0?'var(--pos)':(v<0?'var(--neg)':'var(--mut)');return `<span class="pill" style="background:${bg};color:${col}">${s}${fmt0(v)}</span>`;}
+ function spark(vals,w=160,h=42){const v=vals.filter(x=>x!=null);if(v.length<2)return '';const up=vals[vals.length-1]>=vals[0];const col=up?'#1a8f5a':'#d1344b';const mn=Math.min(...v),mx=Math.max(...v),rg=(mx-mn)||1;
+  const pts=vals.map((x,i)=>{const px=8+i/(vals.length-1)*(w-16);const py=h-6-((x-mn)/rg)*(h-14);return px.toFixed(1)+','+py.toFixed(1);}).join(' ');
+  const dots=vals.map((x,i)=>{const px=8+i/(vals.length-1)*(w-16);const py=h-6-((x-mn)/rg)*(h-14);return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="2.1" fill="${col}"/>`;}).join('');
+  return `<svg width="${w}" height="${h}" style="display:block;margin:auto"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg>`;}
+ const D=DCC.by_canal;
+ let h=`<table><thead><tr><th class="l" rowspan="2">Cadena</th><th rowspan="2">Skip CC<br>YTD</th><th rowspan="2">Var YTD</th><th class="grp" colspan="7">Skip CC dentro de SKIP · L6M</th><th rowspan="2">Var L6M</th><th rowspan="2">Mes actual<br>(${D0.lastm_name})</th></tr><tr>`;
+ MESES.forEach(m=>h+=`<th class="grp" style="border-left:none;border-right:none">${m}</th>`);
+ h+=`<th class="grp" style="border-left:none">Gr\u00e1fico</th></tr></thead><tbody>`;
+ D.rows.forEach(r=>{h+=`<tr><td class="cadena">${r.canal}</td><td class="big">${fmt(r.ytd,1)}%</td><td>${bpsPill(r.var_ytd)}</td>`;
+  r.m26.forEach((x,i)=>{h+=`<td class="mcell ${i===0?'grpL':''} grp">${x==null?'\u2014':fmt(x,1)+'%'}</td>`;});
+  h+=`<td class="grp grpR spark-td">${spark(r.m26)}</td><td>${bpsPill(r.var_l6m)}</td><td class="b">${fmt(r.jun,1)}%</td></tr>`;});
+ const t=D.total;
+ h+=`<tr class="tot"><td class="cadena">TOTAL</td><td class="big">${fmt(t.ytd,1)}%</td><td>${bpsPill(t.var_ytd)}</td>`;
+ t.m26.forEach((x,i)=>{h+=`<td class="mcell ${i===0?'grpL':''} grp">${x==null?'\u2014':fmt(x,1)+'%'}</td>`;});
+ h+=`<td class="grp grpR spark-td">${spark(t.m26)}</td><td>${bpsPill(t.var_l6m)}</td><td class="b">${fmt(t.jun,1)}%</td></tr>`;
+ h+='</tbody></table>';document.getElementById('ccTabla').innerHTML=h;
+})();
+
+/* ===== RESUMEN EJECUTIVO ===== */
+(function(){
+ const D=D0;const s=D.summary;
+ const fmt=(n,d=1)=>n==null?'\u2014':n.toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+ const fmt0=n=>n==null?'\u2014':Math.round(n).toLocaleString('es-AR');
+ const ulv=D.manuf_value[0], ulvol=D.manuf_volume[0];
+ const fmts=D.mkt_vol_fmt.slice().sort((a,b)=>a.ytd_var-b.ytd_var);
+ const worstFmt=fmts[0], bestFmt=fmts[fmts.length-1];
+ const canalWorst=D.mkt_vol_canal.slice().sort((a,b)=>a.ytd_var-b.ytd_var)[0];
+ const canalBest=D.mkt_vol_canal.slice().sort((a,b)=>b.ytd_var-a.ytd_var)[0];
+ const ulLead=D.varieties['UNILEVER'].leaders[0], ulBleed=D.varieties['UNILEVER'].bleeders[0];
+ const bleed0=(D.brand_bandera.bleeders.find(x=>x.manuf==="UNILEVER")||D.brand_bandera.bleeders[0]);
+ const lead0=(D.brand_bandera.leaders.find(x=>x.manuf==="UNILEVER")||D.brand_bandera.leaders[0]);
+ const compG=D.top_comp_manuf;
+ const sgn=v=>(v>0?'+':'')+fmt(v,1);
+ const ulYtdWord=ulv.ytd_var<0?`cede ${fmt0(-ulv.ytd_var)} bps YTD`:`gana ${fmt0(ulv.ytd_var)} bps YTD`;
+ const ulVolWord=ulvol.ytd_var<0?`${fmt0(ulvol.ytd_var)} bps en volumen`:`+${fmt0(ulvol.ytd_var)} bps en volumen`;
+ const ulMomWord=ulv.mom_var<0?`retrocede algo en el mes (${fmt0(ulv.mom_var)} bps MoM)`:`mejora en el mes (+${fmt0(ulv.mom_var)} bps MoM)`;
+ const diag=[
+  `Mercado en <b>volumen ${sgn(s.vol_ytd_var)}% YTD</b> con valor <b>+${fmt(s.val_ytd_var,1)}%</b> (efecto precio/inflaci\u00f3n). El formato <b>${worstFmt.k}</b> es el m\u00e1s golpeado (${sgn(worstFmt.ytd_var)}% vol), mientras <b>${bestFmt.k}</b> lidera (${sgn(bestFmt.ytd_var)}%).`,
+  `<b>Unilever lidera con ${fmt(ulv.ytd26,1)}% de share valor</b> y ${ulYtdWord} (${ulVolWord}); ${ulMomWord}.`,
+  (compG.ytd_var>=0?`<b>${compG.manuf} es el principal competidor que gana</b> entre los focos (+${fmt0(compG.ytd_var)} bps valor YTD, ${fmt(compG.ytd26,1)}% share), capturando terreno.`:`<b>${compG.manuf} es el principal competidor</b> (${fmt(compG.ytd26,1)}% share) pero tambi\u00e9n cede terreno (${fmt0(compG.ytd_var)} bps YTD), reforzando el liderazgo de Unilever.`),
+  `A nivel variedad, Unilever gana en <b>${ulLead.k}</b> (+${fmt0(ulLead.var)} bps) y sangra en <b>${ulBleed.k}</b> (${fmt0(ulBleed.var)} bps).`,
+ ];
+ const watch=[
+  `Cadena <b>${canalWorst.k}</b> es la de peor din\u00e1mica de volumen (${sgn(canalWorst.ytd_var)}% YTD): revisar cobertura, mix y competitividad de precio de Unilever.`,
+  `Mayor sangrado marca\u00d7cadena: <b>${bleed0.brand}</b> en <b>${bleed0.bandera}</b> (${fmt0(bleed0.var)} bps). Foco de recuperaci\u00f3n inmediata.`,
+  `Cadena <b>${canalBest.k}</b> es la de mejor din\u00e1mica (${sgn(canalBest.ytd_var)}% vol): oportunidad de captura temprana de share.`,
+  `Brecha volumen>valor en Unilever sugiere <b>presi\u00f3n de piso de precio/mix</b> frente a competidores de entrada que ganan g\u00f3ndola.`,
+ ];
+ const act=[
+  `<b>Blindar el formato ${worstFmt.k}</b> y las variedades base cedidas (ej. ${ulBleed.k}) con activaciones de precio-promo y visibilidad en las cadenas de mayor sangrado.`,
+  `<b>Escalar los ganadores</b>: capitalizar ${ulLead.k} y el mejor combo (<b>${lead0.brand}</b> en ${lead0.bandera}, +${fmt0(lead0.var)} bps) ampliando distribuci\u00f3n y facing.`,
+  `<b>Defensa de valor</b>: portafolio de entrada / tama\u00f1os accesibles en ${canalWorst.k} para frenar migraci\u00f3n a marcas economy sin canibalizar premium.`,
+  (compG.ytd_var>=0?`<b>Contener a ${compG.manuf}</b> (el competidor que m\u00e1s gana) con plan JBP dedicado; apostar a <b>${canalBest.k}</b> como cadena de crecimiento temprano.`:`<b>Sostener la ventaja vs ${compG.manuf}</b> (que cede ${fmt0(-compG.ytd_var)} bps) y consolidar liderazgo; apostar a <b>${canalBest.k}</b> como cadena de crecimiento temprano.`),
+ ];
+ document.getElementById('ex_diag').innerHTML=diag.map(t=>`<li class="bad">${t}</li>`).join('');
+ document.getElementById('ex_watch').innerHTML=watch.map(t=>`<li class="warn">${t}</li>`).join('');
+ document.getElementById('ex_act').innerHTML=act.map(t=>`<li>${t}</li>`).join('');
+})();
+</script>
+</body>
+</html>
